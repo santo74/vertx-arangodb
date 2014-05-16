@@ -63,7 +63,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public final String CFG_PROPERTY_TCP_NODELAY = "tcp_nodelay";
 
     // MESSAGE PROPERTIES
-    private final String MSG_PROPERTY_TYPE = "TYPE";
+    public static final String MSG_PROPERTY_TYPE = "type";
 
     // MODULE SETTINGS
     private String SETTING_ADDRESS = "santo.vertx.arangodb";
@@ -91,28 +91,28 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public boolean SETTING_TCP_NODELAY = true;
 
     // Request Types
-    private final String MSG_TYPE_DATABASE = "database";
-    private final String MSG_TYPE_DOCUMENT = "document";
-    private final String MSG_TYPE_EDGE = "edge";
-    private final String MSG_TYPE_AQL = "aql";
-    private final String MSG_TYPE_AQL_QUERY = "aql_query";
-    private final String MSG_TYPE_AQL_CURSOR = "aql_cursor";
-    private final String MSG_TYPE_AQL_USER = "aql_user";
-    private final String MSG_TYPE_SIMPLE_QUERY = "query";
-    private final String MSG_TYPE_COLLECTION = "collection";
-    private final String MSG_TYPE_INDEX = "index";
-    private final String MSG_TYPE_TRANSACTION = "transaction";
-    private final String MSG_TYPE_GRAPH = "graph";
-    private final String MSG_TYPE_TRAVERSAL = "traversal";
-    private final String MSG_TYPE_REPLICATION = "replication";
-    private final String MSG_TYPE_IMPORT = "import";
-    private final String MSG_TYPE_BATCH = "batch";
-    private final String MSG_TYPE_ADMIN = "admin";
-    private final String MSG_TYPE_USER = "user";
-    private final String MSG_TYPE_ASYNC = "async";
-    private final String MSG_TYPE_ENDPOINT = "endpoint";
-    private final String MSG_TYPE_SHARDING = "sharding";
-    private final String MSG_TYPE_MISC = "misc";
+    public static final String MSG_TYPE_DATABASE = "database";
+    public static final String MSG_TYPE_DOCUMENT = "document";
+    public static final String MSG_TYPE_EDGE = "edge";
+    public static final String MSG_TYPE_AQL = "aql";
+    public static final String MSG_TYPE_AQL_QUERY = "aql_query";
+    public static final String MSG_TYPE_AQL_CURSOR = "aql_cursor";
+    public static final String MSG_TYPE_AQL_USER = "aql_user";
+    public static final String MSG_TYPE_SIMPLE_QUERY = "query";
+    public static final String MSG_TYPE_COLLECTION = "collection";
+    public static final String MSG_TYPE_INDEX = "index";
+    public static final String MSG_TYPE_TRANSACTION = "transaction";
+    public static final String MSG_TYPE_GRAPH = "graph";
+    public static final String MSG_TYPE_TRAVERSAL = "traversal";
+    public static final String MSG_TYPE_REPLICATION = "replication";
+    public static final String MSG_TYPE_IMPORT = "import";
+    public static final String MSG_TYPE_BATCH = "batch";
+    public static final String MSG_TYPE_ADMIN = "admin";
+    public static final String MSG_TYPE_USER = "user";
+    public static final String MSG_TYPE_ASYNC = "async";
+    public static final String MSG_TYPE_ENDPOINT = "endpoint";
+    public static final String MSG_TYPE_SHARDING = "sharding";
+    public static final String MSG_TYPE_MISC = "misc";
 
     private Logger logger;
     private final String logPrefix = "";
@@ -187,8 +187,8 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
             client.setSSL(SETTING_SSL);
             client.setTrustAll(SETTING_SSL_TRUSTALL);
             if (client.isSSL()) client.setVerifyHost(SETTING_SSL_VERIFYHOST);
-            client.setHost(SETTING_HOSTNAME);
-            client.setPort(SETTING_PORT);
+            client.setHost(hostname);
+            client.setPort(port);
             client.setKeepAlive(SETTING_KEEPALIVE);
             if (SETTING_SSL_TRUSTSTORE != null) client.setTrustStorePath(SETTING_SSL_TRUSTSTORE);
             if (SETTING_SSL_TRUSTSTORE_PASSWORD != null) client.setTrustStorePassword(SETTING_SSL_TRUSTSTORE_PASSWORD);
@@ -201,6 +201,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
             client.setTCPNoDelay(SETTING_TCP_NODELAY);
             client.setTryUseCompression(SETTING_COMPRESSION);
             
+            // Keep reference
             clients.put(hostname + ":" + port, client);
         }
         
@@ -220,6 +221,8 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
         if (credentialsHeader == null) {
             if (username != null && password != null) {
                 credentialsHeader = Base64.encodeBytes(new StringBuilder(SETTING_USERNAME + ":").append(SETTING_PASSWORD).toString().getBytes(), Base64.DONT_BREAK_LINES);
+                
+                // Keep reference
                 credentials.put(hostname + ":" + port, credentialsHeader);
             }
             else {
