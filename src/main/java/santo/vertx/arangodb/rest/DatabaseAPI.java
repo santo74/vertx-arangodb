@@ -117,9 +117,11 @@ public class DatabaseAPI extends AbstractRestAPI {
         if (!ensureAttribute(document, DOC_ATTRIBUTE_NAME, msg)) return;
 
         // prepare URI
-        String apiPath = API_PATH;
+        StringBuilder apiPath = new StringBuilder();
+        apiPath.append("/_db/").append(persistor.SYSTEM_DATABASE);
+        apiPath.append(API_PATH);
 
-        httpPost(persistor, apiPath, headers, document, timeout, msg);
+        httpPost(persistor, apiPath.toString(), headers, document, timeout, msg);
     }
     
     
