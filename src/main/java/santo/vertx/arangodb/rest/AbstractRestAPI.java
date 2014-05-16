@@ -36,11 +36,11 @@ public abstract class AbstractRestAPI {
     protected int DEFAULT_REQUEST_TIMEOUT = 10000;
 
     // MESSAGE PROPERTIES
-    protected final String MSG_PROPERTY_ACTION = "action";
-    protected final String MSG_PROPERTY_HEADERS = "headers";
-    protected final String MSG_PROPERTY_DATABASE = "database";
-    protected final String MSG_PROPERTY_DOCUMENT = "document";
-    protected final String MSG_PROPERTY_TIMEOUT = "timeout";
+    public static final String MSG_PROPERTY_ACTION = "action";
+    public static final String MSG_PROPERTY_HEADERS = "headers";
+    public static final String MSG_PROPERTY_DATABASE = "database";
+    public static final String MSG_PROPERTY_DOCUMENT = "document";
+    public static final String MSG_PROPERTY_TIMEOUT = "timeout";
 
     // DOCUMENT ATTRIBUTES
     protected final String DOC_ATTRIBUTE_NAME = "name";
