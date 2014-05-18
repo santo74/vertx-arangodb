@@ -69,7 +69,8 @@ public class RestResponseHandler implements Handler<HttpClientResponse> {
                 // The entire response body has been received
                 responseData.append(body);
                 logger.trace("> response: (" + getId() + ")" + responseData);
-                JsonObject restResponse = new JsonObject(responseData.toString());
+                JsonObject restResponse = new JsonObject();
+                if (responseData.length() > 0) restResponse = new JsonObject(responseData.toString());
                 
                 // send response
                 if (statusCode >= 200 && statusCode < 300) sendSuccess(getMsg(), "success", restResponse);
