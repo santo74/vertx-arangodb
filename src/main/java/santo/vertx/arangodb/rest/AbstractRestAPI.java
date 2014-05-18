@@ -41,6 +41,13 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_DATABASE = "database";
     public static final String MSG_PROPERTY_DOCUMENT = "document";
     public static final String MSG_PROPERTY_TIMEOUT = "timeout";
+    public static final String MSG_PROPERTY_ID = "id";
+    public static final String MSG_PROPERTY_COLLECTION = "collection";
+    public static final String MSG_PROPERTY_CREATE_COLLECTION = "createCollection";
+    public static final String MSG_PROPERTY_WAIT_FOR_SYNC = "waitForSync";
+    public static final String MSG_PROPERTY_REVISION = "rev";
+    public static final String MSG_PROPERTY_POLICY = "policy";
+    public static final String MSG_PROPERTY_KEEPNULL = "keepNull";
 
     // DOCUMENT ATTRIBUTES
     protected final String DOC_ATTRIBUTE_NAME = "name";
