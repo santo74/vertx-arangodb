@@ -90,7 +90,7 @@ public class DatabaseAPI extends AbstractRestAPI {
 
     // retrieves a list of all databases the current user can access
     private void getUser(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
-        getDb(msg, timeout, headers, dbName, MSG_ACTION_USER);
+        getDb(msg, timeout, headers, persistor.SYSTEM_DATABASE, MSG_ACTION_USER);
     }
 
     // retrieves a list of all existing databases
