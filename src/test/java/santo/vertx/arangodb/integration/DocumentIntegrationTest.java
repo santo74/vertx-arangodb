@@ -39,7 +39,7 @@ import santo.vertx.arangodb.rest.DocumentAPI;
  * @author sANTo
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DocumentIntegrationTest  extends TestVerticle {
+public class DocumentIntegrationTest extends TestVerticle {
     
     private static final String DEFAULT_ADDRESS = "santo.vertx.arangodb";
     private static final String DEFAULT_TEST_DB = "testdb";

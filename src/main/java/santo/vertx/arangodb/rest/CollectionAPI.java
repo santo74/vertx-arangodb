@@ -54,22 +54,7 @@ public class CollectionAPI  extends AbstractRestAPI {
     }
     
     @Override
-    public void processRequest(Message<JsonObject> msg) {
-        JsonObject request = msg.body();
-        
-        // MANDATORY: action to perform
-        String action = helper.getMandatoryString(request, MSG_PROPERTY_ACTION, msg);
-        if (action == null) return;
-
-        // OPTIONAL: headers to use for the operation
-        JsonObject headers = helper.getOptionalObject(request, MSG_PROPERTY_HEADERS);
-
-        // OPTIONAL: timeout for the action (defaults to 10sec)
-        int timeout = helper.getOptionalInt(request, MSG_PROPERTY_TIMEOUT, DEFAULT_REQUEST_TIMEOUT);
-        
-        // OPTIONAL: database on which the action should be performed (will default to the database specified in the config or _system if none was specified)
-        String dbName = helper.getOptionalString(request, MSG_PROPERTY_DATABASE, persistor.SETTING_DBNAME);
-
+    protected void performAction(Message<JsonObject> msg, String action, JsonObject headers, int timeout, String dbName) {
         logger.trace(logPrefix + "Action: " + action);
         
         switch (action) {

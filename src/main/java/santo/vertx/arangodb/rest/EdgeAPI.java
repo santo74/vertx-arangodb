@@ -20,14 +20,16 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.logging.Logger;
 import santo.vertx.arangodb.ArangoPersistor;
+import static santo.vertx.arangodb.rest.AbstractRestAPI.API_BASE_PATH;
 
 /**
  *
  * @author sANTo
  */
-public class DocumentAPI  extends AbstractRestAPI {
+public class EdgeAPI  extends AbstractRestAPI {
     
-    public static final String API_PATH = API_BASE_PATH + "/document";
+    public static final String API_PATH = API_BASE_PATH + "/edge";
+    public static final String API_PATH_MULTI = API_PATH + "s";
 
     public static final String MSG_ACTION_READ = "read";
     public static final String MSG_ACTION_GET = "get";
@@ -39,9 +41,9 @@ public class DocumentAPI  extends AbstractRestAPI {
     public static final String MSG_ACTION_DELETE = "delete";
     public static final String MSG_ACTION_HEAD = "head";
     public static final String MSG_ACTION_HEADER = "header";
-    public static final String MSG_ACTION_LIST = "list";
+    public static final String MSG_ACTION_RELATIONS = "relations";
 
-    public DocumentAPI(Logger logger, ArangoPersistor persistor) {
+    public EdgeAPI(Logger logger, ArangoPersistor persistor) {
         this.logger = logger;
         this.persistor = persistor;
     }
@@ -54,27 +56,27 @@ public class DocumentAPI  extends AbstractRestAPI {
             case MSG_ACTION_READ:
             case MSG_ACTION_GET:
             case MSG_ACTION_BY_ID:
-                getDocument(msg, timeout, headers, dbName);
+                getEdge(msg, timeout, headers, dbName);
                 break;
             case MSG_ACTION_CREATE:
-                createDocument(msg, timeout, headers, dbName);
+                createEdge(msg, timeout, headers, dbName);
                 break;                
             case MSG_ACTION_REPLACE:
-                replaceDocument(msg, timeout, headers, dbName);
+                replaceEdge(msg, timeout, headers, dbName);
                 break;                
             case MSG_ACTION_PATCH:
             case MSG_ACTION_UPDATE:
-                updateDocument(msg, timeout, headers, dbName);
+                updateEdge(msg, timeout, headers, dbName);
                 break;                
             case MSG_ACTION_DELETE:
-                deleteDocument(msg, timeout, headers, dbName);
+                deleteEdge(msg, timeout, headers, dbName);
                 break;                
             case MSG_ACTION_HEAD:
             case MSG_ACTION_HEADER:
-                getDocumentHeader(msg, timeout, headers, dbName);
+                getEdgeHeader(msg, timeout, headers, dbName);
                 break;                
-            case MSG_ACTION_LIST:
-                getList(msg, timeout, headers, dbName);
+            case MSG_ACTION_RELATIONS:
+                getRelations(msg, timeout, headers, dbName);
                 break;                
 
             default:
@@ -83,8 +85,8 @@ public class DocumentAPI  extends AbstractRestAPI {
         }
     }
 
-    // retrieves the specified document
-    private void getDocument(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // retrieves the specified edge
+    private void getEdge(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         String id = helper.getMandatoryString(msg.body(), MSG_PROPERTY_ID, msg);
         if (id == null) return;
 
@@ -97,14 +99,22 @@ public class DocumentAPI  extends AbstractRestAPI {
         httpGet(persistor, apiPath.toString(), headers, timeout, msg);
     }
 
-    // creates a new document
-    private void createDocument(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // creates a new edge
+    private void createEdge(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         // check required params
         JsonObject document = helper.getMandatoryObject(msg.body(), MSG_PROPERTY_DOCUMENT, msg);
         if (document == null) return;
 
         String collection = helper.getMandatoryString(msg.body(), MSG_PROPERTY_COLLECTION, msg);
         if (collection == null) return;
+
+        // REQUIRED: The document handle of the start point must be passed in from handle
+        String from = helper.getMandatoryString(msg.body(), MSG_PROPERTY_FROM, msg);
+        if (from == null) return;
+
+        // REQUIRED: The document handle of the end point must be passed in to handle
+        String to = helper.getMandatoryString(msg.body(), MSG_PROPERTY_TO, msg);
+        if (to == null) return;
 
         // get optional params
         
@@ -118,15 +128,18 @@ public class DocumentAPI  extends AbstractRestAPI {
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
+        
         apiPath.append("/?").append(MSG_PROPERTY_COLLECTION).append("=").append(collection);
+        apiPath.append("&").append(MSG_PROPERTY_FROM).append("=").append(from);
+        apiPath.append("&").append(MSG_PROPERTY_TO).append("=").append(to);
         if (createCollection) apiPath.append("&").append(MSG_PROPERTY_CREATE_COLLECTION).append("=").append(createCollection);
         if (waitForSync) apiPath.append("&").append(MSG_PROPERTY_WAIT_FOR_SYNC).append("=").append(waitForSync);
 
         httpPost(persistor, apiPath.toString(), headers, document, timeout, msg);
     }
 
-    // replaces the specified document
-    private void replaceDocument(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // replaces the specified edge
+    private void replaceEdge(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         // check required params
         JsonObject document = helper.getMandatoryObject(msg.body(), MSG_PROPERTY_DOCUMENT, msg);
         if (document == null) return;
@@ -165,8 +178,8 @@ public class DocumentAPI  extends AbstractRestAPI {
         httpPut(persistor, apiPath.toString(), headers, document, timeout, msg);
     }
 
-    // updates (patches) the specified document
-    private void updateDocument(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // updates (patches) the specified edge
+    private void updateEdge(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         // check required params
         JsonObject document = helper.getMandatoryObject(msg.body(), MSG_PROPERTY_DOCUMENT, msg);
         if (document == null) return;
@@ -213,8 +226,8 @@ public class DocumentAPI  extends AbstractRestAPI {
         httpPatch(persistor, apiPath.toString(), headers, document, timeout, msg);
     }
 
-    // deletes the specified document
-    private void deleteDocument(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // deletes the specified edge
+    private void deleteEdge(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         // check required params
         String id = helper.getMandatoryString(msg.body(), MSG_PROPERTY_ID, msg);
         if (id == null) return;
@@ -250,8 +263,8 @@ public class DocumentAPI  extends AbstractRestAPI {
         httpDelete(persistor, apiPath.toString(), headers, timeout, msg);
     }
 
-    // reads a document header
-    private void getDocumentHeader(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // reads an edge header
+    private void getEdgeHeader(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         // check required params
         String id = helper.getMandatoryString(msg.body(), MSG_PROPERTY_ID, msg);
         if (id == null) return;
@@ -271,16 +284,27 @@ public class DocumentAPI  extends AbstractRestAPI {
         httpHead(persistor, apiPath.toString(), headers, timeout, msg);
     }
 
-    // retrieves all documents from the specified collection
-    private void getList(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
+    // Retrieves all in- and/or outbound edges for the specified vertex
+    private void getRelations(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         String collection = helper.getMandatoryString(msg.body(), MSG_PROPERTY_COLLECTION, msg);
         if (collection == null) return;
+
+        // The id of the start vertex 
+        String vertex = helper.getMandatoryString(msg.body(), MSG_PROPERTY_VERTEX, msg);
+        if (vertex == null) return;
+
+        // get optional params
+        
+        // OPTIONAL: Selects in or out direction for edges. If not set, any edges are returned
+        String direction = helper.getOptionalString(msg.body(), MSG_PROPERTY_DIRECTION, null);
 
         // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null && dbName.length() > 0) apiPath.append("/_db/").append(dbName);
-        apiPath.append(API_PATH);
-        apiPath.append("/?").append(MSG_PROPERTY_COLLECTION).append("=").append(collection);
+        apiPath.append(API_PATH_MULTI);
+        apiPath.append("/").append(collection);
+        apiPath.append("/?").append(MSG_PROPERTY_VERTEX).append("=").append(vertex);
+        if (direction!= null) apiPath.append("&").append(MSG_PROPERTY_DIRECTION).append("=").append(direction);
 
         httpGet(persistor, apiPath.toString(), headers, timeout, msg);
     }

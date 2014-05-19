@@ -99,8 +99,9 @@ public class CollectionIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("Collection creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                     if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No collection id received", arangoResult.getString("id"));
 
-                    // Create an extra temp collection that we can remove in the next test
-                    JsonObject documentObject = new JsonObject().putString("name", "tempcol");
+                    // Create an extra collection for edges
+                    JsonObject documentObject = new JsonObject().putString("name", "edgecol");
+                    documentObject.putNumber("type", 3);
                     JsonObject requestObject = new JsonObject();
                     requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
                     requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_CREATE);
@@ -114,15 +115,38 @@ public class CollectionIntegrationTest extends TestVerticle {
                                 JsonObject arangoResult = response.getObject("result");
                                 VertxAssert.assertTrue("Collection creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                                 if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No collection id received", arangoResult.getString("id"));
+                                
+                                // Create an extra temp collection that we can remove in the next test
+                                JsonObject documentObject = new JsonObject().putString("name", "tempcol");
+                                JsonObject requestObject = new JsonObject();
+                                requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
+                                requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_CREATE);
+                                requestObject.putObject(CollectionAPI.MSG_PROPERTY_DOCUMENT, documentObject);
+                                vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
+                                    @Override
+                                    public void handle(Message<JsonObject> reply) {
+                                        try {
+                                            JsonObject response = reply.body();
+                                            System.out.println("response: " + response);
+                                            JsonObject arangoResult = response.getObject("result");
+                                            VertxAssert.assertTrue("Collection creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
+                                            if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No collection id received", arangoResult.getString("id"));
+                                        }
+                                        catch (Exception e) {
+                                            e.printStackTrace();
+                                            VertxAssert.fail("test01CreateTestCollections");
+                                        }
+                                        VertxAssert.testComplete();
+                                    }
+                                });
+
                             }
                             catch (Exception e) {
                                 e.printStackTrace();
                                 VertxAssert.fail("test01CreateTestCollections");
                             }
-                            VertxAssert.testComplete();
                         }
                     });
-
                 }
                 catch (Exception e) {
                     e.printStackTrace();

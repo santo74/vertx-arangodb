@@ -51,6 +51,10 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_WITH_REVISIONS = "withRevisions";
     public static final String MSG_PROPERTY_WITH_DATA = "withData";
     public static final String MSG_PROPERTY_EXCLUDE_SYSTEM = "excludeSystem";
+    public static final String MSG_PROPERTY_FROM = "from";
+    public static final String MSG_PROPERTY_TO = "to";
+    public static final String MSG_PROPERTY_VERTEX = "vertex";
+    public static final String MSG_PROPERTY_DIRECTION = "direction";
 
     // DOCUMENT ATTRIBUTES
     protected final String DOC_ATTRIBUTE_NAME = "name";
@@ -60,6 +64,25 @@ public abstract class AbstractRestAPI {
     protected final String logPrefix = "";
     
     protected Helper helper = Helper.getHelper();
+    
+    public void processRequest(Message<JsonObject> msg) {
+        JsonObject request = msg.body();
+        
+        // MANDATORY: action to perform
+        String action = helper.getMandatoryString(request, MSG_PROPERTY_ACTION, msg);
+        if (action == null) return;
+
+        // OPTIONAL: headers to use for the operation
+        JsonObject headers = helper.getOptionalObject(request, MSG_PROPERTY_HEADERS);
+
+        // OPTIONAL: timeout for the action (defaults to 10sec)
+        int timeout = helper.getOptionalInt(request, MSG_PROPERTY_TIMEOUT, DEFAULT_REQUEST_TIMEOUT);
+        
+        // OPTIONAL: database on which the action should be performed (will default to the database specified in the config or _system if none was specified)
+        String dbName = helper.getOptionalString(request, MSG_PROPERTY_DATABASE, persistor.SETTING_DBNAME);
+        
+        performAction(msg, action, headers, timeout, dbName);
+    }
     
     protected HttpClientRequest addRequestHeaders(HttpClientRequest clientRequest, ArangoPersistor persistor, JsonObject headers) {
         // set headers
@@ -271,5 +294,5 @@ public abstract class AbstractRestAPI {
         addRequestHeaders(clientRequest, persistor, headers).setTimeout(timeout).end();        
     }
 
-    public abstract void processRequest(Message<JsonObject> msg);
+    protected abstract void performAction(Message<JsonObject> msg, String action, JsonObject headers, int timeout, String dbName);
 }
