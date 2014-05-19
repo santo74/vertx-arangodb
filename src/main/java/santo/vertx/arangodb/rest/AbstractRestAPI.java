@@ -55,9 +55,22 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_TO = "to";
     public static final String MSG_PROPERTY_VERTEX = "vertex";
     public static final String MSG_PROPERTY_DIRECTION = "direction";
+    public static final String MSG_PROPERTY_QUERY = "query";
 
     // DOCUMENT ATTRIBUTES
     protected final String DOC_ATTRIBUTE_NAME = "name";
+    protected final String DOC_ATTRIBUTE_COLLECTION = "collection";
+    protected final String DOC_ATTRIBUTE_EXAMPLE = "example";
+    protected final String DOC_ATTRIBUTE_INDEX = "index";
+    protected final String DOC_ATTRIBUTE_CONDITION = "condition";
+    protected final String DOC_ATTRIBUTE_ATTRIBUTE = "attribute";
+    protected final String DOC_ATTRIBUTE_LEFT = "left";
+    protected final String DOC_ATTRIBUTE_RIGHT = "right";
+    protected final String DOC_ATTRIBUTE_LATITUDE = "latitude";
+    protected final String DOC_ATTRIBUTE_LONGITUDE = "longitude";
+    protected final String DOC_ATTRIBUTE_RADIUS = "radius";
+    protected final String DOC_ATTRIBUTE_QUERY = "query";
+    protected final String DOC_ATTRIBUTE_NEW_VALUE = "newValue";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;
