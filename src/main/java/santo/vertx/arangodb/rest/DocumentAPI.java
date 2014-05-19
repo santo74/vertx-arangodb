@@ -94,7 +94,7 @@ public class DocumentAPI  extends AbstractRestAPI {
 
             default:
                 logger.info(logPrefix + "invalid action, ignoring (" + action + ")");
-                helper.getHelper().sendError(msg, "invalid action, ignoring (" + action + ")");
+                helper.sendError(msg, "invalid action, ignoring (" + action + ")");
         }
     }
 
@@ -103,7 +103,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         String id = helper.getMandatoryString(msg.body(), MSG_PROPERTY_ID, msg);
         if (id == null) return;
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null && dbName.length() > 0) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -129,7 +129,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         // OPTIONAL: Wait until document has been synced to disk
         boolean waitForSync = helper.getOptionalBoolean(msg.body(), MSG_PROPERTY_WAIT_FOR_SYNC, false);
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -160,7 +160,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         // OPTIONAL: policy to control update behaviour in case of a mismatch
         String policy = helper.getOptionalString(msg.body(), MSG_PROPERTY_POLICY, null);
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -203,7 +203,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         // OPTIONAL: if false, then all attributes that have value null in patch document will be removed from existing document
         boolean keepNull = helper.getOptionalBoolean(msg.body(), MSG_PROPERTY_KEEPNULL, true); // keep all attributes by default
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -245,7 +245,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         // OPTIONAL: policy to control update behaviour in case of a mismatch
         String policy = helper.getOptionalString(msg.body(), MSG_PROPERTY_POLICY, null);
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -276,7 +276,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         // OPTIONAL: target revision for the operation (e.g. update a specific revision of a document)
         String revision = helper.getOptionalString(msg.body(), MSG_PROPERTY_REVISION, null);
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -291,7 +291,7 @@ public class DocumentAPI  extends AbstractRestAPI {
         String collection = helper.getMandatoryString(msg.body(), MSG_PROPERTY_COLLECTION, msg);
         if (collection == null) return;
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null && dbName.length() > 0) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);

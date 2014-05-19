@@ -81,6 +81,7 @@ public class DatabaseIntegrationTest extends TestVerticle {
         
     @Test
     public void test01CreateDatabase() {
+        System.out.println("*** test01CreateDatabase ***");
         JsonObject databaseObject = new JsonObject().putString("name", dbName);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DATABASE);
@@ -107,7 +108,8 @@ public class DatabaseIntegrationTest extends TestVerticle {
     }
 
     @Test
-    public void test02getCurrentDatabase() {
+    public void test02GetCurrentDatabase() {
+        System.out.println("*** test02GetCurrentDatabase ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DATABASE);
         requestObject.putString(DatabaseAPI.MSG_PROPERTY_ACTION, DatabaseAPI.MSG_ACTION_CURRENT);
@@ -125,7 +127,7 @@ public class DatabaseIntegrationTest extends TestVerticle {
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    VertxAssert.fail("test02getCurrentDatabase");
+                    VertxAssert.fail("test02GetCurrentDatabase");
                 }
                 VertxAssert.testComplete();
             }
@@ -133,7 +135,8 @@ public class DatabaseIntegrationTest extends TestVerticle {
     }
 
     @Test
-    public void test03getUserDatabases() {
+    public void test03GetUserDatabases() {
+        System.out.println("*** test03GetUserDatabases ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DATABASE);
         requestObject.putString(DatabaseAPI.MSG_PROPERTY_ACTION, DatabaseAPI.MSG_ACTION_USER);
@@ -151,7 +154,7 @@ public class DatabaseIntegrationTest extends TestVerticle {
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    VertxAssert.fail("test03getUserDatabases");
+                    VertxAssert.fail("test03GetUserDatabases");
                 }
                 VertxAssert.testComplete();
             }
@@ -160,6 +163,7 @@ public class DatabaseIntegrationTest extends TestVerticle {
 
     @Test
     public void test04ListDatabases() {
+        System.out.println("*** test04ListDatabases ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DATABASE);
         requestObject.putString(DatabaseAPI.MSG_PROPERTY_ACTION, DatabaseAPI.MSG_ACTION_LIST);
@@ -183,6 +187,7 @@ public class DatabaseIntegrationTest extends TestVerticle {
         });
     }
 
+    /*
     @Test
     public void test05DropDatabase() {
         JsonObject requestObject = new JsonObject();
@@ -208,6 +213,7 @@ public class DatabaseIntegrationTest extends TestVerticle {
             }
         });
     }
+    */
 
     private JsonObject loadConfig() {
         logger.info(logPrefix + "(re)loading Config");

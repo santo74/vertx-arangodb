@@ -81,6 +81,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
     
     @Test
     public void test01CreateDocument() {
+        System.out.println("*** test01CreateDocument ***");
         JsonObject documentObject = new JsonObject().putString("description", "test");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
@@ -98,7 +99,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
                     if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
                     
                     // read the new document
-                    test02getDocument(arangoResult.getString("_id"), arangoResult.getString("_rev"));
+                    test02GetDocument(arangoResult.getString("_id"), arangoResult.getString("_rev"));
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -109,7 +110,8 @@ public class DocumentIntegrationTest  extends TestVerticle {
         });
     }
 
-    public void test02getDocument(final String id, final String rev) {
+    public void test02GetDocument(final String id, final String rev) {
+        System.out.println("*** test02GetDocument ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_READ);
@@ -121,23 +123,24 @@ public class DocumentIntegrationTest  extends TestVerticle {
                     JsonObject response = reply.body();
                     System.out.println("response: " + response);
                     JsonObject arangoResult = response.getObject("result");
-                    VertxAssert.assertEquals("The retrieval of the specified document resulted in an error: " + arangoResult.getString("errorMessage"), "ok", response.getString("status"));
+                    VertxAssert.assertEquals("The retrieval of the specified document resulted in an error: " + response.getString("message"), "ok", response.getString("status"));
                     //VertxAssert.assertTrue("The request for the specified document was invalid: (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                     System.out.println("document details: " + arangoResult);
                     
                     // get the document header
-                    test03getDocumentHeader(id, rev);
+                    test03GetDocumentHeader(id, rev);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    VertxAssert.fail("test02getDocument");
+                    VertxAssert.fail("test02GetDocument");
                 }
                 //VertxAssert.testComplete();
             }
         });
     }
 
-    public void test03getDocumentHeader(final String id, final String rev) {
+    public void test03GetDocumentHeader(final String id, final String rev) {
+        System.out.println("*** test03GetDocumentHeader ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_HEAD);
@@ -157,7 +160,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    VertxAssert.fail("test03getDocumentHeader");
+                    VertxAssert.fail("test03GetDocumentHeader");
                 }
                 //VertxAssert.testComplete();
             }
@@ -165,6 +168,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
     }
 
     public void test04UpdateDocument(final String id, final String rev) {
+        System.out.println("*** test04UpdateDocument ***");
         JsonObject documentObject = new JsonObject().putString("description", "updated test");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
@@ -196,6 +200,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
     }
 
     public void test05ReplaceDocument(final String id, final String rev) {
+        System.out.println("*** test05ReplaceDocument ***");
         JsonObject documentObject = new JsonObject().putString("description", "replaced test");
         documentObject.putString("name", "replacement document");
         JsonObject requestObject = new JsonObject();
@@ -216,7 +221,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
                     System.out.println("document details: " + arangoResult);
                     
                     // get document list
-                    test06getList(id, rev);
+                    test06GetDocumentList(id, rev);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -227,7 +232,8 @@ public class DocumentIntegrationTest  extends TestVerticle {
         });
     }
 
-    public void test06getList(final String id, final String rev) {
+    public void test06GetDocumentList(final String id, final String rev) {
+        System.out.println("*** test06GetDocumentList ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_LIST);
@@ -243,18 +249,19 @@ public class DocumentIntegrationTest  extends TestVerticle {
                     System.out.println("documents for collection: " + arangoResult);
                     
                     // delete the document
-                    test07deleteDocument(id, rev);
+                    test07DeleteDocument(id, rev);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    VertxAssert.fail("test06getList");
+                    VertxAssert.fail("test06GetDocumentList");
                 }
                 //VertxAssert.testComplete();
             }
         });
     }
 
-    public void test07deleteDocument(final String id, final String rev) {
+    public void test07DeleteDocument(final String id, final String rev) {
+        System.out.println("*** test07DeleteDocument ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_DELETE);
@@ -272,7 +279,7 @@ public class DocumentIntegrationTest  extends TestVerticle {
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    VertxAssert.fail("test07deleteDocument");
+                    VertxAssert.fail("test07DeleteDocument");
                 }
                 VertxAssert.testComplete();
             }

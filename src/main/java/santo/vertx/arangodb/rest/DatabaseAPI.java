@@ -20,7 +20,6 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.logging.Logger;
 import santo.vertx.arangodb.ArangoPersistor;
-import santo.vertx.arangodb.Helper;
 
 /**
  *
@@ -79,7 +78,7 @@ public class DatabaseAPI extends AbstractRestAPI {
 
             default:
                 logger.info(logPrefix + "invalid action, ignoring (" + action + ")");
-                Helper.getHelper().sendError(msg, "invalid action, ignoring (" + action + ")");
+                helper.sendError(msg, "invalid action, ignoring (" + action + ")");
         }
     }
     
@@ -99,7 +98,7 @@ public class DatabaseAPI extends AbstractRestAPI {
     }
 
     private void getDb(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName, String filter) {
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         if (dbName != null && dbName.length() > 0) apiPath.append("/_db/").append(dbName);
         apiPath.append(API_PATH);
@@ -116,7 +115,7 @@ public class DatabaseAPI extends AbstractRestAPI {
         // Ensure required parameters/attributes
         if (!ensureAttribute(document, DOC_ATTRIBUTE_NAME, msg)) return;
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         apiPath.append("/_db/").append(persistor.SYSTEM_DATABASE);
         apiPath.append(API_PATH);
@@ -133,7 +132,7 @@ public class DatabaseAPI extends AbstractRestAPI {
             helper.sendError(msg, "the database " + persistor.SYSTEM_DATABASE + " cannot be dropped");
         }
 
-        // prepare URI
+        // prepare PATH
         StringBuilder apiPath = new StringBuilder();
         apiPath.append("/_db/").append(persistor.SYSTEM_DATABASE);
         apiPath.append(API_PATH);

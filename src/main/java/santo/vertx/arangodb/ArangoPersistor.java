@@ -27,6 +27,7 @@ import org.vertx.java.core.json.impl.Base64;
 import org.vertx.java.core.logging.Logger;
 import org.vertx.java.platform.Verticle;
 import santo.vertx.arangodb.rest.AbstractRestAPI;
+import santo.vertx.arangodb.rest.CollectionAPI;
 import santo.vertx.arangodb.rest.DatabaseAPI;
 import santo.vertx.arangodb.rest.DocumentAPI;
 
@@ -265,64 +266,64 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
                 api = new DocumentAPI(logger, this);
                 break;                
             case MSG_TYPE_EDGE:
-                //handler = new EdgeAPI(logger);
+                //api = new EdgeAPI(logger, this);
                 break;
             case MSG_TYPE_AQL:
-                //handler = new AqlAPI(logger);
+                //api = new AqlAPI(logger, this);
                 break;
             case MSG_TYPE_AQL_QUERY:
-                //handler = new AqlQueryAPI(logger);
+                //api = new AqlQueryAPI(logger, this);
                 break;                
             case MSG_TYPE_AQL_CURSOR:
-                //handler = new AqlCursorAPI(logger);
+                //api = new AqlCursorAPI(logger, this);
                 break;
             case MSG_TYPE_AQL_USER:
-                //handler = new AqlUserAPI(logger);
+                //api = new AqlUserAPI(logger, this);
                 break;
             case MSG_TYPE_SIMPLE_QUERY:
                 //api = new SimpleQueryAPI(logger, this);
                 break;                
             case MSG_TYPE_COLLECTION:
-                //handler = new CollectionAPI(logger);
+                api = new CollectionAPI(logger, this);
                 break;
             case MSG_TYPE_INDEX:
-                //handler = new IndexAPI(logger);
+                //api = new IndexAPI(logger, this);
                 break;
             case MSG_TYPE_TRANSACTION:
-                //handler = new TransactionAPI(logger);
+                //api = new TransactionAPI(logger, this);
                 break;                
             case MSG_TYPE_GRAPH:
-                //handler = new GraphAPI(logger);
+                //api = new GraphAPI(logger, this);
                 break;
             case MSG_TYPE_TRAVERSAL:
-                //handler = new TraversalAPI(logger);
+                //api = new TraversalAPI(logger, this);
                 break;
             case MSG_TYPE_REPLICATION:
-                //handler = new ReplicationAPI(logger);
+                //api = new ReplicationAPI(logger, this);
                 break;                
             case MSG_TYPE_IMPORT:
-                //handler = new ImportAPI(logger);
+                //api = new ImportAPI(logger, this);
                 break;
             case MSG_TYPE_BATCH:
-                //handler = new BatchAPI(logger);
+                //api = new BatchAPI(logger, this);
                 break;
             case MSG_TYPE_ADMIN:
-                //handler = new AdminAPI(logger);
+                //api = new AdminAPI(logger, this);
                 break;                
             case MSG_TYPE_USER:
-                //handler = new UserAPI(logger);
+                //api = new UserAPI(logger, this);
                 break;
             case MSG_TYPE_ASYNC:
-                //handler = new AsyncAPI(logger);
+                //api = new AsyncAPI(logger, this);
                 break;
             case MSG_TYPE_ENDPOINT:
-                //handler = new EndpointAPI(logger);
+                //api = new EndpointAPI(logger, this);
                 break;                
             case MSG_TYPE_SHARDING:
-                //handler = new ShardingAPI(logger);
+                //api = new ShardingAPI(logger, this);
                 break;
             case MSG_TYPE_MISC:
-                //handler = new MiscAPI(logger);
+                //api = new MiscAPI(logger, this);
                 break;
                 
             default:

@@ -48,6 +48,9 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_REVISION = "rev";
     public static final String MSG_PROPERTY_POLICY = "policy";
     public static final String MSG_PROPERTY_KEEPNULL = "keepNull";
+    public static final String MSG_PROPERTY_WITH_REVISIONS = "withRevisions";
+    public static final String MSG_PROPERTY_WITH_DATA = "withData";
+    public static final String MSG_PROPERTY_EXCLUDE_SYSTEM = "excludeSystem";
 
     // DOCUMENT ATTRIBUTES
     protected final String DOC_ATTRIBUTE_NAME = "name";
