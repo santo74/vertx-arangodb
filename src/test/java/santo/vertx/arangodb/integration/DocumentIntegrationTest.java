@@ -98,8 +98,34 @@ public class DocumentIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("Document creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                     if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
                     
-                    // read the new document
-                    test02GetDocument(arangoResult.getString("_id"), arangoResult.getString("_rev"));
+                    // Create another document that can be used in later tests
+                    JsonObject documentObject = new JsonObject().putString("description", "test2");
+                    JsonObject requestObject = new JsonObject();
+                    requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
+                    requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
+                    requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
+                    requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+                    vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
+                        @Override
+                        public void handle(Message<JsonObject> reply) {
+                            try {
+                                JsonObject response = reply.body();
+                                System.out.println("response: " + response);
+                                JsonObject arangoResult = response.getObject("result");
+                                VertxAssert.assertTrue("Document creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
+                                if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
+
+
+                                // read the new document
+                                test02GetDocument(arangoResult.getString("_id"), arangoResult.getString("_rev"));
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                                VertxAssert.fail("test01CreateDocument");
+                            }
+                            //VertxAssert.testComplete();
+                        }
+                    });
                 }
                 catch (Exception e) {
                     e.printStackTrace();
