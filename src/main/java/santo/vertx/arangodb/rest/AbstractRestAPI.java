@@ -60,6 +60,7 @@ public abstract class AbstractRestAPI {
     // DOCUMENT ATTRIBUTES
     public static final String DOC_ATTRIBUTE_NAME = "name";
     public static final String DOC_ATTRIBUTE_COLLECTION = "collection";
+    public static final String DOC_ATTRIBUTE_COLLECTIONS = DOC_ATTRIBUTE_COLLECTION + "s";
     public static final String DOC_ATTRIBUTE_EXAMPLE = "example";
     public static final String DOC_ATTRIBUTE_INDEX = "index";
     public static final String DOC_ATTRIBUTE_CONDITION = "condition";
@@ -74,6 +75,7 @@ public abstract class AbstractRestAPI {
     public static final String DOC_ATTRIBUTE_TYPE = "type";
     public static final String DOC_ATTRIBUTE_SIZE = "size";
     public static final String DOC_ATTRIBUTE_FIELDS = "fields";
+    public static final String DOC_ATTRIBUTE_ACTION = "action";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;

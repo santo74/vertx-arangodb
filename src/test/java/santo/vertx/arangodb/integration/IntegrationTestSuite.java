@@ -16,7 +16,6 @@
 
 package santo.vertx.arangodb.integration;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.vertx.testtools.TestVerticle;
@@ -34,6 +33,7 @@ import org.vertx.testtools.TestVerticle;
     ,DocumentIntegrationTest.class
     ,EdgeIntegrationTest.class
     ,SimpleQueryIntegrationTest.class
+    ,TransactionIntegrationTest.class
     ,CleanupIntegrationTest.class
 })
 public class IntegrationTestSuite extends TestVerticle {
