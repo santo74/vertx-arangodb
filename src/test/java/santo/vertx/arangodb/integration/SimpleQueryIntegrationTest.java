@@ -16,21 +16,14 @@
 
 package santo.vertx.arangodb.integration;
 
-import java.net.URL;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.testtools.TestVerticle;
 import org.vertx.testtools.VertxAssert;
 import santo.vertx.arangodb.ArangoPersistor;
-import santo.vertx.arangodb.Helper;
 import santo.vertx.arangodb.rest.SimpleQueryAPI;
 
 /**
@@ -39,45 +32,7 @@ import santo.vertx.arangodb.rest.SimpleQueryAPI;
  * @author sANTo
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SimpleQueryIntegrationTest extends TestVerticle {
-    
-    private static final String DEFAULT_ADDRESS = "santo.vertx.arangodb";
-    private static final String DEFAULT_TEST_DB = "testdb";
-    
-    private Logger logger;
-    private final String logPrefix = "";
-    private JsonObject config;
-    private String address;
-    private String dbName;
-    
-    @Override
-    public void start() {
-        initialize();
-        logger = container.logger();
-        config = loadConfig();
-        address = Helper.getHelper().getOptionalString(config, "address", DEFAULT_ADDRESS);
-        dbName = Helper.getHelper().getOptionalString(config, "dbname", DEFAULT_TEST_DB);
-        
-        // Deploy our persistor before starting the tests
-        deployVerticle(ArangoPersistor.class.getName(), config, 1);
-    }
-    
-    private void deployVerticle(final String vertName, JsonObject vertConfig, int vertInstances) {
-        logger.trace(logPrefix + "(deployVerticle) vertName: " + vertName);
-        if (vertName == null || vertConfig == null) {
-            logger.error(logPrefix + "Unable to deploy the requested verticle because one of the parameters is invalid: " + "Name=" + vertName + ",Config=" + vertConfig);
-            return;
-        }
-        container.deployVerticle(vertName, vertConfig, vertInstances, new AsyncResultHandler<String>() {
-            @Override
-            public void handle(AsyncResult<String> asyncResult) {
-                logger.info(logPrefix + "verticle " + vertName + (asyncResult.succeeded() ? " was deployed successfully !" : " failed to deploy"));
-                VertxAssert.assertTrue(asyncResult.succeeded());
-                VertxAssert.assertNotNull("Persistor deployment failed", asyncResult.result());
-                startTests();
-            }
-        });
-    }
+public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
         
     @Test
     public void test01GetAll() {
@@ -100,7 +55,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test01GetAll");
                 }
                 VertxAssert.testComplete();
@@ -132,7 +86,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test02GetByExample");
                 }
                 VertxAssert.testComplete();
@@ -164,7 +117,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test03GetFirstExample");
                 }
                 VertxAssert.testComplete();
@@ -173,13 +125,12 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
     }
 
     // TODO
-    /*
     @Test
     public void test04GetByExampleHash() {
         System.out.println("*** test04GetByExampleHash ***");
         JsonObject queryObject = new JsonObject();
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, "hash-id");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexHashId);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "from-doc");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -199,23 +150,20 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test04GetByExampleHash");
                 }
                 VertxAssert.testComplete();
             }
         });
     }
-    */
     
     // TODO
-    /*
     @Test
     public void test05GetByExampleSkiplist() {
         System.out.println("*** test05GetByExampleSkiplist ***");
         JsonObject queryObject = new JsonObject();
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, "skiplist-id");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexSkiplistId);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "from-doc");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -235,14 +183,12 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test05GetByExampleSkiplist");
                 }
                 VertxAssert.testComplete();
             }
         });
     }
-    */
     
     // TODO
     /*
@@ -271,7 +217,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test06GetByExampleBitarray");
                 }
                 VertxAssert.testComplete();
@@ -307,7 +252,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test07GetByConditionSkiplist");
                 }
                 VertxAssert.testComplete();
@@ -343,7 +287,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test08GetByConditionBitarray");
                 }
                 VertxAssert.testComplete();
@@ -373,7 +316,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test09GetAny");
                 }
                 VertxAssert.testComplete();
@@ -407,7 +349,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test10GetRange");
                 }
                 VertxAssert.testComplete();
@@ -441,7 +382,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test11GetNear");
                 }
                 VertxAssert.testComplete();
@@ -476,7 +416,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test12GetWithin");
                 }
                 VertxAssert.testComplete();
@@ -486,7 +425,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
     */
 
     // TODO
-    /*
     @Test
     public void test13GetFulltext() {
         System.out.println("*** test13GetFulltext ***");
@@ -510,14 +448,12 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 201);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test13GetFulltext");
                 }
                 VertxAssert.testComplete();
             }
         });
     }
-    */
 
     @Test
     public void test14UpdateByExample() {
@@ -546,7 +482,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test14UpdateByExample");
                 }
                 VertxAssert.testComplete();
@@ -581,7 +516,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test15ReplaceByExample");
                 }
                 VertxAssert.testComplete();
@@ -613,7 +547,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test16RemoveByExample");
                 }
                 VertxAssert.testComplete();
@@ -642,7 +575,6 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test17GetFirst");
                 }
                 VertxAssert.testComplete();
@@ -671,24 +603,10 @@ public class SimpleQueryIntegrationTest extends TestVerticle {
                     VertxAssert.assertTrue("the query could not be executed successfully (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test18GetLast");
                 }
                 VertxAssert.testComplete();
             }
         });
     }
-
-    private JsonObject loadConfig() {
-        logger.info(logPrefix + "(re)loading Config");
-        URL url = getClass().getResource("/config.json");
-        url.getFile();
-        Buffer configBuffer = vertx.fileSystem().readFileSync(url.getFile());
-        if (configBuffer != null) {
-            return new JsonObject(configBuffer.toString());
-        }
-        
-        return new JsonObject();
-    }
-
 }

@@ -16,21 +16,14 @@
 
 package santo.vertx.arangodb.integration;
 
-import java.net.URL;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.testtools.TestVerticle;
 import org.vertx.testtools.VertxAssert;
 import santo.vertx.arangodb.ArangoPersistor;
-import santo.vertx.arangodb.Helper;
 import santo.vertx.arangodb.rest.CollectionAPI;
 import santo.vertx.arangodb.rest.DocumentAPI;
 
@@ -40,45 +33,7 @@ import santo.vertx.arangodb.rest.DocumentAPI;
  * @author sANTo
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CollectionIntegrationTest extends TestVerticle {
-
-    private static final String DEFAULT_ADDRESS = "santo.vertx.arangodb";
-    private static final String DEFAULT_TEST_DB = "testdb";
-    
-    private Logger logger;
-    private final String logPrefix = "";
-    private JsonObject config;
-    private String address;
-    private String dbName;
-    
-    @Override
-    public void start() {
-        initialize();
-        logger = container.logger();
-        config = loadConfig();
-        address = Helper.getHelper().getOptionalString(config, "address", DEFAULT_ADDRESS);
-        dbName = Helper.getHelper().getOptionalString(config, "dbname", DEFAULT_TEST_DB);
-        
-        // Deploy our persistor before starting the tests
-        deployVerticle(ArangoPersistor.class.getName(), config, 1);
-    }
-    
-    private void deployVerticle(final String vertName, JsonObject vertConfig, int vertInstances) {
-        logger.trace(logPrefix + "(deployVerticle) vertName: " + vertName);
-        if (vertName == null || vertConfig == null) {
-            logger.error(logPrefix + "Unable to deploy the requested verticle because one of the parameters is invalid: " + "Name=" + vertName + ",Config=" + vertConfig);
-            return;
-        }
-        container.deployVerticle(vertName, vertConfig, vertInstances, new AsyncResultHandler<String>() {
-            @Override
-            public void handle(AsyncResult<String> asyncResult) {
-                logger.info(logPrefix + "verticle " + vertName + (asyncResult.succeeded() ? " was deployed successfully !" : " failed to deploy"));
-                VertxAssert.assertTrue(asyncResult.succeeded());
-                VertxAssert.assertNotNull("Persistor deployment failed", asyncResult.result());
-                startTests();
-            }
-        });
-    }
+public class CollectionIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void test01CreateTestCollections() {
@@ -133,7 +88,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                                             if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No collection id received", arangoResult.getString("id"));
                                         }
                                         catch (Exception e) {
-                                            e.printStackTrace();
                                             VertxAssert.fail("test01CreateTestCollections");
                                         }
                                         VertxAssert.testComplete();
@@ -142,14 +96,12 @@ public class CollectionIntegrationTest extends TestVerticle {
 
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
                                 VertxAssert.fail("test01CreateTestCollections");
                             }
                         }
                     });
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test01CreateTestCollections");
                 }
             }
@@ -176,7 +128,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test02Rename");
                 }
                 VertxAssert.testComplete();
@@ -202,7 +153,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test03DeleteCollection");
                 }
                 VertxAssert.testComplete();
@@ -246,7 +196,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                                 System.out.println("response details: " + arangoResult);
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
                                 VertxAssert.fail("test04Rotate");
                             }
                             VertxAssert.testComplete();
@@ -254,7 +203,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     });
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test04Rotate");
                 }
                 //VertxAssert.testComplete();
@@ -280,7 +228,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test05TruncateCollection");
                 }
                 VertxAssert.testComplete();
@@ -306,7 +253,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test06Unload");
                 }
                 VertxAssert.testComplete();
@@ -332,7 +278,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test07Load");
                 }
                 VertxAssert.testComplete();
@@ -360,7 +305,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test08ChangeProperties");
                 }
                 VertxAssert.testComplete();
@@ -386,7 +330,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test09ReadCollection");
                 }
                 VertxAssert.testComplete();
@@ -411,7 +354,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test10ListCollections");
                 }
                 VertxAssert.testComplete();
@@ -437,7 +379,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test11GetCollectionProperties");
                 }
                 VertxAssert.testComplete();
@@ -463,7 +404,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test12GetCollectionCount");
                 }
                 VertxAssert.testComplete();
@@ -489,7 +429,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test13GetCollectionFigures");
                 }
                 VertxAssert.testComplete();
@@ -515,7 +454,6 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test14GetCollectionRevision");
                 }
                 VertxAssert.testComplete();
@@ -541,26 +479,10 @@ public class CollectionIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test15GetCollectionChecksum");
                 }
                 VertxAssert.testComplete();
             }
         });
     }
-
-    
-    
-    private JsonObject loadConfig() {
-        logger.info(logPrefix + "(re)loading Config");
-        URL url = getClass().getResource("/config.json");
-        url.getFile();
-        Buffer configBuffer = vertx.fileSystem().readFileSync(url.getFile());
-        if (configBuffer != null) {
-            return new JsonObject(configBuffer.toString());
-        }
-        
-        return new JsonObject();
-    }
-
 }

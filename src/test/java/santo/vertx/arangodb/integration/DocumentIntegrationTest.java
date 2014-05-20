@@ -16,21 +16,14 @@
 
 package santo.vertx.arangodb.integration;
 
-import java.net.URL;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.testtools.TestVerticle;
 import org.vertx.testtools.VertxAssert;
 import santo.vertx.arangodb.ArangoPersistor;
-import santo.vertx.arangodb.Helper;
 import santo.vertx.arangodb.rest.DocumentAPI;
 
 /**
@@ -39,45 +32,7 @@ import santo.vertx.arangodb.rest.DocumentAPI;
  * @author sANTo
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DocumentIntegrationTest extends TestVerticle {
-    
-    private static final String DEFAULT_ADDRESS = "santo.vertx.arangodb";
-    private static final String DEFAULT_TEST_DB = "testdb";
-    
-    private Logger logger;
-    private final String logPrefix = "";
-    private JsonObject config;
-    private String address;
-    private String dbName;
-    
-    @Override
-    public void start() {
-        initialize();
-        logger = container.logger();
-        config = loadConfig();
-        address = Helper.getHelper().getOptionalString(config, "address", DEFAULT_ADDRESS);
-        dbName = Helper.getHelper().getOptionalString(config, "dbname", DEFAULT_TEST_DB);
-        
-        // Deploy our persistor before starting the tests
-        deployVerticle(ArangoPersistor.class.getName(), config, 1);
-    }
-    
-    private void deployVerticle(final String vertName, JsonObject vertConfig, int vertInstances) {
-        logger.trace(logPrefix + "(deployVerticle) vertName: " + vertName);
-        if (vertName == null || vertConfig == null) {
-            logger.error(logPrefix + "Unable to deploy the requested verticle because one of the parameters is invalid: " + "Name=" + vertName + ",Config=" + vertConfig);
-            return;
-        }
-        container.deployVerticle(vertName, vertConfig, vertInstances, new AsyncResultHandler<String>() {
-            @Override
-            public void handle(AsyncResult<String> asyncResult) {
-                logger.info(logPrefix + "verticle " + vertName + (asyncResult.succeeded() ? " was deployed successfully !" : " failed to deploy"));
-                VertxAssert.assertTrue(asyncResult.succeeded());
-                VertxAssert.assertNotNull("Persistor deployment failed", asyncResult.result());
-                startTests();
-            }
-        });
-    }
+public class DocumentIntegrationTest extends BaseIntegrationTest {
     
     @Test
     public void test01CreateDocument() {
@@ -115,12 +70,10 @@ public class DocumentIntegrationTest extends TestVerticle {
                                 VertxAssert.assertTrue("Document creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                                 if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
 
-
                                 // read the new document
                                 test02GetDocument(arangoResult.getString("_id"), arangoResult.getString("_rev"));
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
                                 VertxAssert.fail("test01CreateDocument");
                             }
                             //VertxAssert.testComplete();
@@ -128,7 +81,6 @@ public class DocumentIntegrationTest extends TestVerticle {
                     });
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test01CreateDocument");
                 }
                 //VertxAssert.testComplete();
@@ -157,7 +109,6 @@ public class DocumentIntegrationTest extends TestVerticle {
                     test03GetDocumentHeader(id, rev);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test02GetDocument");
                 }
                 //VertxAssert.testComplete();
@@ -185,7 +136,6 @@ public class DocumentIntegrationTest extends TestVerticle {
                     test04UpdateDocument(id, rev);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test03GetDocumentHeader");
                 }
                 //VertxAssert.testComplete();
@@ -217,7 +167,6 @@ public class DocumentIntegrationTest extends TestVerticle {
                     test05ReplaceDocument(id, arangoResult.getString("_rev"));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test04UpdateDocument");
                 }
                 //VertxAssert.testComplete();
@@ -250,7 +199,6 @@ public class DocumentIntegrationTest extends TestVerticle {
                     test06GetDocumentList(id, rev);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test05ReplaceDocument");
                 }
                 //VertxAssert.testComplete();
@@ -278,7 +226,6 @@ public class DocumentIntegrationTest extends TestVerticle {
                     test07DeleteDocument(id, rev);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test06GetDocumentList");
                 }
                 //VertxAssert.testComplete();
@@ -304,23 +251,10 @@ public class DocumentIntegrationTest extends TestVerticle {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
                     VertxAssert.fail("test07DeleteDocument");
                 }
                 VertxAssert.testComplete();
             }
         });
-    }
-
-    private JsonObject loadConfig() {
-        logger.info(logPrefix + "(re)loading Config");
-        URL url = getClass().getResource("/config.json");
-        url.getFile();
-        Buffer configBuffer = vertx.fileSystem().readFileSync(url.getFile());
-        if (configBuffer != null) {
-            return new JsonObject(configBuffer.toString());
-        }
-        
-        return new JsonObject();
     }
 }
