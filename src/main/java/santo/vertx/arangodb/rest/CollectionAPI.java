@@ -25,7 +25,7 @@ import santo.vertx.arangodb.ArangoPersistor;
  *
  * @author sANTo
  */
-public class CollectionAPI  extends AbstractRestAPI {
+public class CollectionAPI extends AbstractRestAPI {
     
     public static final String API_PATH = API_BASE_PATH + "/collection";
 

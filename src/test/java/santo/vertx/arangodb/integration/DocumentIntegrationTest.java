@@ -35,8 +35,8 @@ import santo.vertx.arangodb.rest.DocumentAPI;
 public class DocumentIntegrationTest extends BaseIntegrationTest {
     
     @Test
-    public void test01CreateDocument() {
-        System.out.println("*** test01CreateDocument ***");
+    public void test01aCreateTestDocument() {
+        System.out.println("*** test01aCreateTestDocument ***");
         JsonObject documentObject = new JsonObject().putString("description", "test");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
@@ -70,30 +70,88 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                                 VertxAssert.assertTrue("Document creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                                 if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
 
-                                // read the new document
-                                test02GetDocument(arangoResult.getString("_id"), arangoResult.getString("_rev"));
+                                docId = arangoResult.getString("_id");
+                                docRevision = arangoResult.getString("_rev");
                             }
                             catch (Exception e) {
-                                VertxAssert.fail("test01CreateDocument");
+                                VertxAssert.fail("test01aCreateTestDocument");
                             }
-                            //VertxAssert.testComplete();
+                            VertxAssert.testComplete();
                         }
                     });
                 }
                 catch (Exception e) {
-                    VertxAssert.fail("test01CreateDocument");
+                    VertxAssert.fail("test01aCreateTestDocument");
                 }
                 //VertxAssert.testComplete();
             }
         });
     }
 
-    public void test02GetDocument(final String id, final String rev) {
+    @Test
+    public void test01bCreateGeoDocument() {
+        System.out.println("*** test01bCreateGeoDocument ***");
+        JsonObject documentObject = new JsonObject().putString("description", "GEO location test document");
+        documentObject.putNumber(DocumentAPI.DOC_ATTRIBUTE_LATITUDE, 1);
+        documentObject.putNumber(DocumentAPI.DOC_ATTRIBUTE_LONGITUDE, 1);
+        JsonObject requestObject = new JsonObject();
+        requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
+        requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
+            @Override
+            public void handle(Message<JsonObject> reply) {
+                try {
+                    JsonObject response = reply.body();
+                    System.out.println("response: " + response);
+                    JsonObject arangoResult = response.getObject("result");
+                    VertxAssert.assertTrue("Document creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
+                    if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
+                }
+                catch (Exception e) {
+                    VertxAssert.fail("test01bCreateGeoDocument");
+                }
+                VertxAssert.testComplete();
+            }
+        });
+    }
+
+    @Test
+    public void test01cCreateRangeDocument() {
+        System.out.println("*** test01cCreateRangeDocument ***");
+        JsonObject documentObject = new JsonObject().putString("description", "Range test document (skiplist)");
+        documentObject.putNumber("age", 30);
+        JsonObject requestObject = new JsonObject();
+        requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
+        requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
+            @Override
+            public void handle(Message<JsonObject> reply) {
+                try {
+                    JsonObject response = reply.body();
+                    System.out.println("response: " + response);
+                    JsonObject arangoResult = response.getObject("result");
+                    VertxAssert.assertTrue("Document creation resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
+                    if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
+                }
+                catch (Exception e) {
+                    VertxAssert.fail("test01cCreateRangeDocument");
+                }
+                VertxAssert.testComplete();
+            }
+        });
+    }
+
+    @Test
+    public void test02GetDocument() {
         System.out.println("*** test02GetDocument ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_READ);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, id);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, docId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -104,24 +162,22 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                     VertxAssert.assertEquals("The retrieval of the specified document resulted in an error: " + response.getString("message"), "ok", response.getString("status"));
                     //VertxAssert.assertTrue("The request for the specified document was invalid: (returncode: " + arangoResult.getInteger("code") + ")", arangoResult.getInteger("code") == 200);
                     System.out.println("document details: " + arangoResult);
-                    
-                    // get the document header
-                    test03GetDocumentHeader(id, rev);
                 }
                 catch (Exception e) {
                     VertxAssert.fail("test02GetDocument");
                 }
-                //VertxAssert.testComplete();
+                VertxAssert.testComplete();
             }
         });
     }
 
-    public void test03GetDocumentHeader(final String id, final String rev) {
+    @Test
+    public void test03GetDocumentHeader() {
         System.out.println("*** test03GetDocumentHeader ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_HEAD);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, id);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, docId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -131,26 +187,24 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                     JsonObject arangoResult = response.getObject("result");
                     VertxAssert.assertEquals("The retrieval of the specified document header resulted in an error: " + arangoResult.getString("errorMessage"), "ok", response.getString("status"));
                     System.out.println("document details: " + arangoResult);
-                    
-                    // update the document
-                    test04UpdateDocument(id, rev);
                 }
                 catch (Exception e) {
                     VertxAssert.fail("test03GetDocumentHeader");
                 }
-                //VertxAssert.testComplete();
+                VertxAssert.testComplete();
             }
         });
     }
 
-    public void test04UpdateDocument(final String id, final String rev) {
+    @Test
+    public void test04UpdateDocument() {
         System.out.println("*** test04UpdateDocument ***");
         JsonObject documentObject = new JsonObject().putString("description", "updated test");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_UPDATE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, id);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, docId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -160,21 +214,21 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                     JsonObject arangoResult = response.getObject("result");
                     VertxAssert.assertTrue("Document update resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                     if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
-                    VertxAssert.assertNotSame("Document not correctly updated", rev, arangoResult.getString("_rev"));
+                    VertxAssert.assertNotSame("Document not correctly updated", docRevision, arangoResult.getString("_rev"));
                     System.out.println("document details: " + arangoResult);
                     
-                    // replace the document
-                    test05ReplaceDocument(id, arangoResult.getString("_rev"));
+                    docRevision = arangoResult.getString("_rev");
                 }
                 catch (Exception e) {
                     VertxAssert.fail("test04UpdateDocument");
                 }
-                //VertxAssert.testComplete();
+                VertxAssert.testComplete();
             }
         });
     }
 
-    public void test05ReplaceDocument(final String id, final String rev) {
+    @Test
+    public void test05ReplaceDocument() {
         System.out.println("*** test05ReplaceDocument ***");
         JsonObject documentObject = new JsonObject().putString("description", "replaced test");
         documentObject.putString("name", "replacement document");
@@ -182,7 +236,7 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_REPLACE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, id);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, docId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -192,21 +246,19 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                     JsonObject arangoResult = response.getObject("result");
                     VertxAssert.assertTrue("Document replacement resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
                     if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
-                    VertxAssert.assertNotSame("Document not correctly replaced", rev, arangoResult.getString("_rev"));
+                    VertxAssert.assertNotSame("Document not correctly replaced", docRevision, arangoResult.getString("_rev"));
                     System.out.println("document details: " + arangoResult);
-                    
-                    // get document list
-                    test06GetDocumentList(id, rev);
                 }
                 catch (Exception e) {
                     VertxAssert.fail("test05ReplaceDocument");
                 }
-                //VertxAssert.testComplete();
+                VertxAssert.testComplete();
             }
         });
     }
 
-    public void test06GetDocumentList(final String id, final String rev) {
+    @Test
+    public void test06GetDocumentList() {
         System.out.println("*** test06GetDocumentList ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
@@ -221,24 +273,22 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                     JsonObject arangoResult = response.getObject("result");
                     VertxAssert.assertEquals("The listing of all the document for the specified collection resulted in an error: " + arangoResult.getString("errorMessage"), "ok", response.getString("status"));
                     System.out.println("documents for collection: " + arangoResult);
-                    
-                    // delete the document
-                    test07DeleteDocument(id, rev);
                 }
                 catch (Exception e) {
                     VertxAssert.fail("test06GetDocumentList");
                 }
-                //VertxAssert.testComplete();
+                VertxAssert.testComplete();
             }
         });
     }
 
-    public void test07DeleteDocument(final String id, final String rev) {
+    @Test
+    public void test07DeleteDocument() {
         System.out.println("*** test07DeleteDocument ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_DELETE);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, id);
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_ID, docId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {

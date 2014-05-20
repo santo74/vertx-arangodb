@@ -30,6 +30,7 @@ import org.vertx.testtools.TestVerticle;
 @Suite.SuiteClasses({
     DatabaseIntegrationTest.class
     ,CollectionIntegrationTest.class
+    ,IndexIntegrationTest.class
     ,DocumentIntegrationTest.class
     ,EdgeIntegrationTest.class
     ,SimpleQueryIntegrationTest.class

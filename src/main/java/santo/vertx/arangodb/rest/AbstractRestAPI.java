@@ -71,6 +71,9 @@ public abstract class AbstractRestAPI {
     public static final String DOC_ATTRIBUTE_RADIUS = "radius";
     public static final String DOC_ATTRIBUTE_QUERY = "query";
     public static final String DOC_ATTRIBUTE_NEW_VALUE = "newValue";
+    public static final String DOC_ATTRIBUTE_TYPE = "type";
+    public static final String DOC_ATTRIBUTE_SIZE = "size";
+    public static final String DOC_ATTRIBUTE_FIELDS = "fields";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;

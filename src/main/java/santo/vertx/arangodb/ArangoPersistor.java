@@ -31,6 +31,7 @@ import santo.vertx.arangodb.rest.CollectionAPI;
 import santo.vertx.arangodb.rest.DatabaseAPI;
 import santo.vertx.arangodb.rest.DocumentAPI;
 import santo.vertx.arangodb.rest.EdgeAPI;
+import santo.vertx.arangodb.rest.IndexAPI;
 import santo.vertx.arangodb.rest.SimpleQueryAPI;
 
 /**
@@ -289,7 +290,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
                 api = new CollectionAPI(logger, this);
                 break;
             case MSG_TYPE_INDEX:
-                //api = new IndexAPI(logger, this);
+                api = new IndexAPI(logger, this);
                 break;
             case MSG_TYPE_TRANSACTION:
                 //api = new TransactionAPI(logger, this);

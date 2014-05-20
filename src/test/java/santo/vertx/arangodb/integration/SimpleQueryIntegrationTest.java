@@ -124,7 +124,6 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
         });
     }
 
-    // TODO
     @Test
     public void test04GetByExampleHash() {
         System.out.println("*** test04GetByExampleHash ***");
@@ -157,7 +156,6 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
         });
     }
     
-    // TODO
     @Test
     public void test05GetByExampleSkiplist() {
         System.out.println("*** test05GetByExampleSkiplist ***");
@@ -165,7 +163,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexSkiplistId);
         JsonObject exampleObject = new JsonObject();
-        exampleObject.putString("description", "from-doc");
+        exampleObject.putNumber("age", 30);
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
@@ -232,9 +230,9 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
         System.out.println("*** test07GetByConditionSkiplist ***");
         JsonObject queryObject = new JsonObject();
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, "skiplist-id");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexSkiplistId);
         JsonObject conditionObject = new JsonObject();
-        conditionObject.putString("description", "from-doc");
+        conditionObject.putNumber("age", 30);
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_CONDITION, conditionObject);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
@@ -323,8 +321,6 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
         });
     }
 
-    // TODO
-    /*
     @Test
     public void test10GetRange() {
         System.out.println("*** test10GetRange ***");
@@ -355,10 +351,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
             }
         });
     }
-    */
     
-    // TODO
-    /*
     @Test
     public void test11GetNear() {
         System.out.println("*** test11GetNear ***");
@@ -388,10 +381,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
             }
         });
     }
-    */
     
-    // TODO
-    /*
     @Test
     public void test12GetWithin() {
         System.out.println("*** test12GetWithin ***");
@@ -422,9 +412,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
             }
         });
     }
-    */
 
-    // TODO
     @Test
     public void test13GetFulltext() {
         System.out.println("*** test13GetFulltext ***");
