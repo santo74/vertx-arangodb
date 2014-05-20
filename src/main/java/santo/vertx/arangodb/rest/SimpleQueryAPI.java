@@ -128,7 +128,7 @@ public class SimpleQueryAPI extends AbstractRestAPI {
         // Ensure required parameters/attributes
         if (!ensureAttribute(query, DOC_ATTRIBUTE_COLLECTION, msg)) return;
 
-        performSimpleQuery(msg, timeout, headers, dbName, MSG_ACTION_GET_ALL, query);
+        performSimpleQuery(msg, timeout, headers, dbName, action, query);
     }
 
     private void getOrRemoveByExample(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName, String action, JsonObject query) {
