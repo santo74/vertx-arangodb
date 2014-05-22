@@ -24,6 +24,7 @@ import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.http.HttpClientResponse;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.logging.Logger;
 import santo.vertx.arangodb.Helper;
@@ -67,10 +68,13 @@ public class RestResponseHandler implements Handler<HttpClientResponse> {
             @Override
             public void handle(Buffer body) {
                 // The entire response body has been received
+                JsonObject restResponse = new JsonObject();
                 responseData.append(body);
                 logger.trace("> response: (" + getId() + ")" + responseData);
-                JsonObject restResponse = new JsonObject();
-                if (responseData.length() > 0) restResponse = new JsonObject(responseData.toString());
+                if (responseData != null && responseData.length() > 0) {
+                    if (responseData.toString().startsWith("[")) restResponse = new JsonArray(responseData.toString()).get(0);
+                    else restResponse = new JsonObject(responseData.toString());
+                }
                 
                 // send response
                 if (statusCode >= 200 && statusCode < 300) sendSuccess(getMsg(), "success", restResponse);
