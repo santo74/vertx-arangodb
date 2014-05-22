@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.testtools.VertxAssert;
 import santo.vertx.arangodb.ArangoPersistor;
@@ -38,7 +39,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test01GetAll() {
         System.out.println("*** test01GetAll ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
         requestObject.putString(SimpleQueryAPI.MSG_PROPERTY_ACTION, SimpleQueryAPI.MSG_ACTION_GET_ALL);
@@ -66,7 +67,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test02GetByExample() {
         System.out.println("*** test02GetByExample ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "from-doc");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -97,7 +98,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test03GetFirstExample() {
         System.out.println("*** test03GetFirstExample ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "to-doc");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -128,7 +129,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test04GetByExampleHash() {
         System.out.println("*** test04GetByExampleHash ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexHashId);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "from-doc");
@@ -160,7 +161,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test05GetByExampleSkiplist() {
         System.out.println("*** test05GetByExampleSkiplist ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexSkiplistId);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putNumber("age", 30);
@@ -194,7 +195,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test06GetByExampleBitarray() {
         System.out.println("*** test06GetByExampleBitarray ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, "bitarray-id");
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "from-doc");
@@ -223,16 +224,16 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     }
     */
     
-    // TODO
-    /*
     @Test
     public void test07GetByConditionSkiplist() {
         System.out.println("*** test07GetByConditionSkiplist ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, indexSkiplistId);
         JsonObject conditionObject = new JsonObject();
-        conditionObject.putNumber("age", 30);
+        JsonArray conditionArray = new JsonArray();
+        conditionArray.add(new JsonArray().add("<").add(40));
+        conditionObject.putArray("age", conditionArray);
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_CONDITION, conditionObject);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
@@ -256,7 +257,6 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
             }
         });
     }
-    */
     
     // TODO
     /*
@@ -264,7 +264,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test08GetByConditionBitarray() {
         System.out.println("*** test08GetByConditionBitarray ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_INDEX, "bitarray-id");
         JsonObject conditionObject = new JsonObject();
         conditionObject.putString("description", "from-doc");
@@ -297,7 +297,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test09GetAny() {
         System.out.println("*** test09GetAny ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
         requestObject.putString(SimpleQueryAPI.MSG_PROPERTY_ACTION, SimpleQueryAPI.MSG_ACTION_GET_ANY);
@@ -325,7 +325,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test10GetRange() {
         System.out.println("*** test10GetRange ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_ATTRIBUTE, "age");
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_LEFT, 2);
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_RIGHT, 100);
@@ -356,7 +356,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test11GetNear() {
         System.out.println("*** test11GetNear ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_LATITUDE, 1);
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_LONGITUDE, 1);
         JsonObject requestObject = new JsonObject();
@@ -386,7 +386,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test12GetWithin() {
         System.out.println("*** test12GetWithin ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_LATITUDE, 1);
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_LONGITUDE, 1);
         queryObject.putNumber(SimpleQueryAPI.DOC_ATTRIBUTE_RADIUS, 5000);
@@ -417,7 +417,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test13GetFulltext() {
         System.out.println("*** test13GetFulltext ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_ATTRIBUTE, "description");
         queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_QUERY, "doc");
         JsonObject requestObject = new JsonObject();
@@ -447,7 +447,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test14UpdateByExample() {
         System.out.println("*** test14UpdateByExample ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "test2");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -481,7 +481,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test15ReplaceByExample() {
         System.out.println("*** test15ReplaceByExample ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "test2-updated");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -515,7 +515,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test16RemoveByExample() {
         System.out.println("*** test16RemoveByExample ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject exampleObject = new JsonObject();
         exampleObject.putString("description", "removeme");
         queryObject.putObject(SimpleQueryAPI.DOC_ATTRIBUTE_EXAMPLE, exampleObject);
@@ -546,7 +546,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test17GetFirst() {
         System.out.println("*** test17GetFirst ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
         requestObject.putString(SimpleQueryAPI.MSG_PROPERTY_ACTION, SimpleQueryAPI.MSG_ACTION_GET_FIRST);
@@ -574,7 +574,7 @@ public class SimpleQueryIntegrationTest extends BaseIntegrationTest {
     public void test18GetLast() {
         System.out.println("*** test18GetLast ***");
         JsonObject queryObject = new JsonObject();
-        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, "testcol");
+        queryObject.putString(SimpleQueryAPI.DOC_ATTRIBUTE_COLLECTION, vertexColName);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_SIMPLE_QUERY);
         requestObject.putString(SimpleQueryAPI.MSG_PROPERTY_ACTION, SimpleQueryAPI.MSG_ACTION_GET_LAST);

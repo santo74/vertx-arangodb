@@ -39,7 +39,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
     public void test01CreateTestCollections() {
         System.out.println("*** test01CreateTestCollections ***");
         // Create a test collection that we can use throughout the whole test cycle
-        JsonObject documentObject = new JsonObject().putString("name", "testcol");
+        JsonObject documentObject = new JsonObject().putString("name", vertexColName);
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_CREATE);
@@ -55,7 +55,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
                     if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No collection id received", arangoResult.getString("id"));
 
                     // Create an extra collection for edges
-                    JsonObject documentObject = new JsonObject().putString("name", "edgecol");
+                    JsonObject documentObject = new JsonObject().putString("name", edgeColName);
                     documentObject.putNumber("type", 3);
                     JsonObject requestObject = new JsonObject();
                     requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
@@ -93,7 +93,6 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
                                         VertxAssert.testComplete();
                                     }
                                 });
-
                             }
                             catch (Exception e) {
                                 VertxAssert.fail("test01CreateTestCollections");
@@ -170,7 +169,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -184,7 +183,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
                     JsonObject requestObject = new JsonObject();
                     requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
                     requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_ROTATE);
-                    requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+                    requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
                     vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
                         @Override
                         public void handle(Message<JsonObject> reply) {
@@ -216,7 +215,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_TRUNCATE);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -241,7 +240,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_UNLOAD);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -266,7 +265,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_LOAD);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -293,7 +292,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_CHANGE_PROPERTIES);
         requestObject.putObject(CollectionAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -318,7 +317,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_READ);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -367,7 +366,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_GET_PROPERTIES);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -392,7 +391,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_COUNT);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -417,7 +416,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_FIGURES);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -442,7 +441,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_REVISION);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -467,7 +466,7 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_COLLECTION);
         requestObject.putString(CollectionAPI.MSG_PROPERTY_ACTION, CollectionAPI.MSG_ACTION_CHECKSUM);
-        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(CollectionAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {

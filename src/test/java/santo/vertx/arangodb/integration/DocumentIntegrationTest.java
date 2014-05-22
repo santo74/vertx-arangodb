@@ -42,7 +42,7 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -59,7 +59,7 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
                     requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
                     requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
                     requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-                    requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+                    requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
                     vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
                         @Override
                         public void handle(Message<JsonObject> reply) {
@@ -98,7 +98,7 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -126,7 +126,7 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -263,7 +263,7 @@ public class DocumentIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_LIST);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {

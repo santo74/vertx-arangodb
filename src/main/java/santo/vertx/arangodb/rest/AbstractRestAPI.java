@@ -56,6 +56,11 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_VERTEX = "vertex";
     public static final String MSG_PROPERTY_DIRECTION = "direction";
     public static final String MSG_PROPERTY_QUERY = "query";
+    public static final String MSG_PROPERTY_NAME = "name";
+    public static final String MSG_PROPERTY_GRAPH_NAME = "graph-name";
+    public static final String MSG_PROPERTY_VERTEX_NAME = "vertex-name";
+    public static final String MSG_PROPERTY_EDGE_NAME = "edge-name";
+    public static final String MSG_PROPERTY_VERTEX_ID = "vertex-id";
 
     // DOCUMENT ATTRIBUTES
     public static final String DOC_ATTRIBUTE_NAME = "name";
@@ -76,6 +81,11 @@ public abstract class AbstractRestAPI {
     public static final String DOC_ATTRIBUTE_SIZE = "size";
     public static final String DOC_ATTRIBUTE_FIELDS = "fields";
     public static final String DOC_ATTRIBUTE_ACTION = "action";
+    public static final String DOC_ATTRIBUTE_KEY = "_key";
+    public static final String DOC_ATTRIBUTE_VERTICES = "vertices";
+    public static final String DOC_ATTRIBUTE_EDGES = "edges";
+    public static final String DOC_ATTRIBUTE_FROM = "_from";
+    public static final String DOC_ATTRIBUTE_TO = "_to";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;

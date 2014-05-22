@@ -35,6 +35,28 @@ import santo.vertx.arangodb.rest.DatabaseAPI;
 public class DatabaseIntegrationTest extends BaseIntegrationTest {
             
     @Test
+    public void test00CleanupDatabase() {
+        JsonObject requestObject = new JsonObject();
+        requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DATABASE);
+        requestObject.putString(DatabaseAPI.MSG_PROPERTY_ACTION, DatabaseAPI.MSG_ACTION_DROP);
+        requestObject.putString(DatabaseAPI.MSG_PROPERTY_DATABASE, dbName);
+        vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
+            @Override
+            public void handle(Message<JsonObject> reply) {
+                try {
+                    JsonObject response = reply.body();
+                    System.out.println("response: " + response);
+                    // We don't bother about the result, it's just a precaution before starting the tests
+                }
+                catch (Exception e) {
+                    VertxAssert.fail("test00CleanupDatabase");
+                }
+                VertxAssert.testComplete();
+            }
+        });
+    }
+
+    @Test
     public void test01CreateDatabase() {
         System.out.println("*** test01CreateDatabase ***");
         JsonObject databaseObject = new JsonObject().putString("name", dbName);

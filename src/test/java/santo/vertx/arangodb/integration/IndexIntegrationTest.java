@@ -44,7 +44,7 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_CREATE);
-        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         requestObject.putObject(IndexAPI.MSG_PROPERTY_DOCUMENT, indexObject);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
@@ -76,7 +76,7 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_CREATE);
-        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         requestObject.putObject(IndexAPI.MSG_PROPERTY_DOCUMENT, indexObject);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
@@ -108,7 +108,7 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_CREATE);
-        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         requestObject.putObject(IndexAPI.MSG_PROPERTY_DOCUMENT, indexObject);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
@@ -139,7 +139,7 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_CREATE);
-        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         requestObject.putObject(IndexAPI.MSG_PROPERTY_DOCUMENT, indexObject);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
@@ -172,7 +172,7 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_CREATE);
-        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         requestObject.putObject(IndexAPI.MSG_PROPERTY_DOCUMENT, indexObject);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
@@ -201,7 +201,6 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_GET);
-        //requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
         requestObject.putString(IndexAPI.MSG_PROPERTY_ID, indexHashId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
@@ -228,7 +227,7 @@ public class IndexIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_INDEX);
         requestObject.putString(IndexAPI.MSG_PROPERTY_ACTION, IndexAPI.MSG_ACTION_LIST);
-        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(IndexAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {

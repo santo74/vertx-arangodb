@@ -26,7 +26,7 @@ import static santo.vertx.arangodb.rest.AbstractRestAPI.API_BASE_PATH;
  *
  * @author sANTo
  */
-public class EdgeAPI  extends AbstractRestAPI {
+public class EdgeAPI extends AbstractRestAPI {
     
     public static final String API_PATH = API_BASE_PATH + "/edge";
     public static final String API_PATH_MULTI = API_PATH + "s";

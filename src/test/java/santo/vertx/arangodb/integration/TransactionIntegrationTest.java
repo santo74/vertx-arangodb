@@ -39,13 +39,13 @@ public class TransactionIntegrationTest extends BaseIntegrationTest {
         System.out.println("*** test01ExecuteSimpleTransaction ***");
         JsonObject transactionObject = new JsonObject();
         JsonObject collectionsObject = new JsonObject();
-        collectionsObject.putString("write", "testcol");
+        collectionsObject.putString("write", vertexColName);
         transactionObject.putObject(TransactionAPI.DOC_ATTRIBUTE_COLLECTIONS, collectionsObject);
         StringBuilder action = new StringBuilder();
         action.append("function () {");
         action.append("var db = require('internal').db;");
-        action.append("db.").append("testcol").append(".save({'description': 'transaction doc'});");
-        action.append("return db.").append("testcol").append(".count();");
+        action.append("db.").append(vertexColName).append(".save({'description': 'transaction doc'});");
+        action.append("return db.").append(vertexColName).append(".count();");
         action.append("}");
         transactionObject.putString(TransactionAPI.DOC_ATTRIBUTE_ACTION, action.toString());
         JsonObject requestObject = new JsonObject();

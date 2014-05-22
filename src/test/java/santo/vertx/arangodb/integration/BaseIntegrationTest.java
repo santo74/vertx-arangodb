@@ -59,6 +59,9 @@ public class BaseIntegrationTest extends TestVerticle {
     public String address;
     public String dbName;
     
+    public String vertexColName = "vertexcol";
+    public String edgeColName = "edgecol";
+    
     @Override
     public void start() {
         initialize();

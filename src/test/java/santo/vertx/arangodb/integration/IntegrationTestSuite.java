@@ -34,6 +34,7 @@ import org.vertx.testtools.TestVerticle;
     ,EdgeIntegrationTest.class
     ,SimpleQueryIntegrationTest.class
     ,TransactionIntegrationTest.class
+    ,GraphIntegrationTest.class
     ,CleanupIntegrationTest.class
 })
 public class IntegrationTestSuite extends TestVerticle {

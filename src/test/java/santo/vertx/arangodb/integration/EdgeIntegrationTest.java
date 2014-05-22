@@ -45,7 +45,7 @@ public class EdgeIntegrationTest extends BaseIntegrationTest {
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
         requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
         requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+        requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
@@ -64,7 +64,7 @@ public class EdgeIntegrationTest extends BaseIntegrationTest {
                     requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DOCUMENT);
                     requestObject.putString(DocumentAPI.MSG_PROPERTY_ACTION, DocumentAPI.MSG_ACTION_CREATE);
                     requestObject.putObject(DocumentAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-                    requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, "testcol");
+                    requestObject.putString(DocumentAPI.MSG_PROPERTY_COLLECTION, vertexColName);
                     vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
                         @Override
                         public void handle(Message<JsonObject> reply) {
@@ -83,7 +83,7 @@ public class EdgeIntegrationTest extends BaseIntegrationTest {
                                 requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_EDGE);
                                 requestObject.putString(EdgeAPI.MSG_PROPERTY_ACTION, EdgeAPI.MSG_ACTION_CREATE);
                                 requestObject.putObject(EdgeAPI.MSG_PROPERTY_DOCUMENT, documentObject);
-                                requestObject.putString(EdgeAPI.MSG_PROPERTY_COLLECTION, "edgecol");
+                                requestObject.putString(EdgeAPI.MSG_PROPERTY_COLLECTION, edgeColName);
                                 requestObject.putString(EdgeAPI.MSG_PROPERTY_FROM, fromId);
                                 requestObject.putString(EdgeAPI.MSG_PROPERTY_TO, toId);
                                 vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
@@ -239,7 +239,7 @@ public class EdgeIntegrationTest extends BaseIntegrationTest {
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_EDGE);
         requestObject.putString(EdgeAPI.MSG_PROPERTY_ACTION, EdgeAPI.MSG_ACTION_RELATIONS);
-        requestObject.putString(EdgeAPI.MSG_PROPERTY_COLLECTION, "edgecol");
+        requestObject.putString(EdgeAPI.MSG_PROPERTY_COLLECTION, edgeColName);
         requestObject.putString(EdgeAPI.MSG_PROPERTY_VERTEX, fromId);
         vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
             @Override
