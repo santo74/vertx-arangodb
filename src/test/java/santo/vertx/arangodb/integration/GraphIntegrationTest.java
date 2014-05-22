@@ -26,9 +26,10 @@ import org.vertx.testtools.VertxAssert;
 import santo.vertx.arangodb.ArangoPersistor;
 import santo.vertx.arangodb.rest.DocumentAPI;
 import santo.vertx.arangodb.rest.GraphAPI;
+import santo.vertx.arangodb.rest.TraversalAPI;
 
 /**
- * Integration tests for the {@link santo.vertx.arangodb.rest.EdgeAPI} against an external <a href="http://www.arangodb.org">ArangoDB</a> instance
+ * Integration tests for the {@link santo.vertx.arangodb.rest.GraphAPI} against an external <a href="http://www.arangodb.org">ArangoDB</a> instance
  * 
  * @author sANTo
  */
@@ -456,8 +457,36 @@ public class GraphIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void test14DeleteEdge() {
-        System.out.println("*** test14DeleteEdge ***");
+    public void test14Traverse() {
+        System.out.println("*** test14Traverse ***");
+        JsonObject documentObject = new JsonObject().putString(TraversalAPI.DOC_ATTRIBUTE_START_VERTEX, idVertex01);
+        documentObject.putString(TraversalAPI.DOC_ATTRIBUTE_EDGE_COLLECTION, edgeColName);
+        documentObject.putString(TraversalAPI.DOC_ATTRIBUTE_DIRECTION, "any");
+        JsonObject requestObject = new JsonObject();
+        requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_TRAVERSAL);
+        requestObject.putString(TraversalAPI.MSG_PROPERTY_ACTION, TraversalAPI.MSG_ACTION_TRAVERSE);
+        requestObject.putObject(TraversalAPI.MSG_PROPERTY_DOCUMENT, documentObject);
+        vertx.eventBus().send(address, requestObject, new Handler<Message<JsonObject>>() {
+            @Override
+            public void handle(Message<JsonObject> reply) {
+                try {
+                    JsonObject response = reply.body();
+                    System.out.println("response: " + response);
+                    JsonObject arangoResult = response.getObject("result");
+                    VertxAssert.assertTrue("Traversal resulted in an error: " + arangoResult.getString("errorMessage"), !arangoResult.getBoolean("error"));
+                    //if (!arangoResult.getBoolean("error")) VertxAssert.assertNotNull("No document key received", arangoResult.getString("_id"));
+                }
+                catch (Exception e) {
+                    VertxAssert.fail("test14Traverse");
+                }
+                VertxAssert.testComplete();
+            }
+        });
+    }
+
+    @Test
+    public void test15DeleteEdge() {
+        System.out.println("*** test15DeleteEdge ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_GRAPH);
         requestObject.putString(GraphAPI.MSG_PROPERTY_ACTION, GraphAPI.MSG_ACTION_DELETE_EDGE);
@@ -474,7 +503,7 @@ public class GraphIntegrationTest extends BaseIntegrationTest {
                     System.out.println("response details: " + arangoResult);                    
                 }
                 catch (Exception e) {
-                    VertxAssert.fail("test14DeleteEdge");
+                    VertxAssert.fail("test15DeleteEdge");
                 }
                 VertxAssert.testComplete();
             }
@@ -482,8 +511,8 @@ public class GraphIntegrationTest extends BaseIntegrationTest {
     }
     
     @Test
-    public void test15DeleteGraph() {
-        System.out.println("*** test15DeleteGraph ***");
+    public void test16DeleteGraph() {
+        System.out.println("*** test16DeleteGraph ***");
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_GRAPH);
         requestObject.putString(GraphAPI.MSG_PROPERTY_ACTION, GraphAPI.MSG_ACTION_DELETE_GRAPH);
@@ -499,7 +528,7 @@ public class GraphIntegrationTest extends BaseIntegrationTest {
                     System.out.println("response details: " + arangoResult);
                 }
                 catch (Exception e) {
-                    VertxAssert.fail("test15DeleteGraph");
+                    VertxAssert.fail("test16DeleteGraph");
                 }
                 VertxAssert.testComplete();
             }

@@ -86,6 +86,10 @@ public abstract class AbstractRestAPI {
     public static final String DOC_ATTRIBUTE_EDGES = "edges";
     public static final String DOC_ATTRIBUTE_FROM = "_from";
     public static final String DOC_ATTRIBUTE_TO = "_to";
+    public static final String DOC_ATTRIBUTE_START_VERTEX = "startVertex";
+    public static final String DOC_ATTRIBUTE_EDGE_COLLECTION = "edgeCollection";
+    public static final String DOC_ATTRIBUTE_DIRECTION = "direction";
+    public static final String DOC_ATTRIBUTE_EXPANDER = "expander";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;
@@ -158,8 +162,8 @@ public abstract class AbstractRestAPI {
                 for (Object oParamName : paramName) {
                     if (paramBuilder.length() > 0) paramBuilder.append(",");
                     paramBuilder.append(oParamName);
-                    helper.sendError(msg, "parameter missing: one of the following parameters should be specified: " + paramBuilder.toString());
                 }
+                helper.sendError(msg, "parameter missing: one of the following parameters should be specified: " + paramBuilder.toString());
             }
         }
         else {
@@ -169,6 +173,45 @@ public abstract class AbstractRestAPI {
             }
             else {
                 helper.sendError(msg, "parameter missing: " + paramName.get(0));
+            }
+        }
+        
+        return available;
+    }
+
+    /**
+     * Checks whether at least one of the specified attributes is available, sends an error message if it's not and finally returns a boolean indicating the availability
+     * 
+     * @param attribute a {@link List} containing attributes of which at least one should be available
+     * @param attributeName a {@link List} containing the attribute names corresponding to the attributes specified in the attribute list
+     * @param msg the Vertx Message object to which the error message can be send
+     * @return true if attribute is available, false if not
+     */
+    protected boolean ensureAttribute(List attribute, List attributeName, Message<JsonObject> msg) {
+        boolean available = false;
+        
+        // in case of multiple attributes we want to ensure at least one of the attributes in that list is available (i.e. not null)
+        if (attribute.size() > 1) {
+            for (Object oAttribute : attribute) {
+                if (oAttribute != null) available = true;
+            }
+            
+            if (!available) {
+                StringBuilder attributeBuilder = new StringBuilder();
+                for (Object oAttributeName : attributeName) {
+                    if (attributeBuilder.length() > 0) attributeBuilder.append(",");
+                    attributeBuilder.append(oAttributeName);
+                }
+                helper.sendError(msg, "attribute missing: one of the following attributes should be specified: " + attributeBuilder.toString());
+            }
+        }
+        else {
+            // we specified the attribute directly rather than in a list. let's check its availability
+            if (attribute.get(0) != null) {
+                available = true;
+            }
+            else {
+                helper.sendError(msg, "attribute missing: " + attributeName.get(0));
             }
         }
         
@@ -190,7 +233,46 @@ public abstract class AbstractRestAPI {
         }
         return true;
     }
-    
+
+    /**
+     * Checks whether the specified attribute equals one of the provided values
+     * 
+     * @param attributeName the attribute that needs to be checked
+     * @param attributeValue the actual value of the attribute
+     * @param attributeValues the list of possible values for the attribute
+     * @param msg the Vertx Message object to which the error message can be send
+     * @return true if attribute has a valid value, false if not
+     */
+    protected boolean ensureAttributeValue(String attributeName, Object attributeValue, List attributeValues, Message<JsonObject> msg) {
+        boolean valid = false;
+        
+        if (attributeValues.size() > 1) {
+            for (Object oValue : attributeValues) {
+                if (attributeValue.equals(oValue)) valid = true;
+            }
+            
+            if (!valid) {
+                StringBuilder valueBuilder = new StringBuilder();
+                for (Object oValue : attributeValues) {
+                    if (valueBuilder.length() > 0) valueBuilder.append(",");
+                    valueBuilder.append(oValue);
+                }
+                helper.sendError(msg, "Invalid attribute value! Attribute \"" + attributeName + "\" should have one of the following values: " + valueBuilder.toString());
+            }
+        }
+        else {
+            // we specified the parameter directly rather than in a list. let's check its availability
+            if (attributeValue.equals(attributeValues.get(0))) {
+                valid = true;
+            }
+            else {
+                helper.sendError(msg, "Invalid attribute value! Attribute \"" + attributeName + "\" should have the following value: " + attributeValues.get(0));
+            }
+        }
+
+        return valid;
+    }
+
     /**
      * Performs a HTTP GET request on the specified address
      * 

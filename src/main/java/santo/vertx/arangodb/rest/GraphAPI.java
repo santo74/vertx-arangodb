@@ -56,13 +56,6 @@ public class GraphAPI extends AbstractRestAPI {
     public static final String MSG_ACTION_UPDATE_EDGE = "update-edge";
     public static final String MSG_ACTION_DELETE_EDGE = "delete-edge";
 
-    //public static final String MSG_ACTION_REPLACE = "replace";
-    //public static final String MSG_ACTION_PATCH = "patch";
-    //public static final String MSG_ACTION_UPDATE = "update";
-    //public static final String MSG_ACTION_HEAD = "head";
-    //public static final String MSG_ACTION_HEADER = "header";
-    //public static final String MSG_ACTION_RELATIONS = "relations";
-
     public GraphAPI(Logger logger, ArangoPersistor persistor) {
         this.logger = logger;
         this.persistor = persistor;
