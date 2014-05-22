@@ -27,6 +27,7 @@ import org.vertx.java.core.json.impl.Base64;
 import org.vertx.java.core.logging.Logger;
 import org.vertx.java.platform.Verticle;
 import santo.vertx.arangodb.rest.AbstractRestAPI;
+import santo.vertx.arangodb.rest.AqlAPI;
 import santo.vertx.arangodb.rest.CollectionAPI;
 import santo.vertx.arangodb.rest.DatabaseAPI;
 import santo.vertx.arangodb.rest.DocumentAPI;
@@ -275,7 +276,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
                 api = new EdgeAPI(logger, this);
                 break;
             case MSG_TYPE_AQL:
-                //api = new AqlAPI(logger, this);
+                api = new AqlAPI(logger, this);
                 break;
             case MSG_TYPE_AQL_QUERY:
                 //api = new AqlQueryAPI(logger, this);

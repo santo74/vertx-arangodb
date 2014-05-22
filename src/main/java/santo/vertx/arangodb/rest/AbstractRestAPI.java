@@ -61,6 +61,8 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_VERTEX_NAME = "vertex-name";
     public static final String MSG_PROPERTY_EDGE_NAME = "edge-name";
     public static final String MSG_PROPERTY_VERTEX_ID = "vertex-id";
+    public static final String MSG_PROPERTY_NAMESPACE = "namespace";
+    public static final String MSG_PROPERTY_GROUP = "group";
 
     // DOCUMENT ATTRIBUTES
     public static final String DOC_ATTRIBUTE_NAME = "name";
@@ -90,6 +92,7 @@ public abstract class AbstractRestAPI {
     public static final String DOC_ATTRIBUTE_EDGE_COLLECTION = "edgeCollection";
     public static final String DOC_ATTRIBUTE_DIRECTION = "direction";
     public static final String DOC_ATTRIBUTE_EXPANDER = "expander";
+    public static final String DOC_ATTRIBUTE_CODE = "code";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;
