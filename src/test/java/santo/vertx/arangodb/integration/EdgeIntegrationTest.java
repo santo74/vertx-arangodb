@@ -35,6 +35,11 @@ import santo.vertx.arangodb.rest.EdgeAPI;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EdgeIntegrationTest extends BaseIntegrationTest {
     
+    public static String edgeRevision = null;
+    public static String edgeId = null;
+    public static String fromId = null;
+    public static String toId = null;
+
     @Test
     public void test01CreateEdge() {
         System.out.println("*** test01CreateEdge ***");

@@ -32,6 +32,7 @@ import santo.vertx.arangodb.rest.CollectionAPI;
 import santo.vertx.arangodb.rest.DatabaseAPI;
 import santo.vertx.arangodb.rest.DocumentAPI;
 import santo.vertx.arangodb.rest.EdgeAPI;
+import santo.vertx.arangodb.rest.GenericAPI;
 import santo.vertx.arangodb.rest.GraphAPI;
 import santo.vertx.arangodb.rest.IndexAPI;
 import santo.vertx.arangodb.rest.SimpleQueryAPI;
@@ -100,12 +101,11 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public boolean SETTING_TCP_NODELAY = true;
 
     // Request Types
+    public static final String MSG_TYPE_GENERIC = "generic";
     public static final String MSG_TYPE_DATABASE = "database";
     public static final String MSG_TYPE_DOCUMENT = "document";
     public static final String MSG_TYPE_EDGE = "edge";
     public static final String MSG_TYPE_AQL = "aql";
-    public static final String MSG_TYPE_AQL_QUERY = "aql_query";
-    public static final String MSG_TYPE_AQL_CURSOR = "aql_cursor";
     public static final String MSG_TYPE_AQL_USER = "aql_user";
     public static final String MSG_TYPE_SIMPLE_QUERY = "query";
     public static final String MSG_TYPE_COLLECTION = "collection";
@@ -266,6 +266,9 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
         AbstractRestAPI api = null;
 
         switch (type) {
+            case MSG_TYPE_GENERIC:
+                api = new GenericAPI(logger, this);
+                break;
             case MSG_TYPE_DATABASE:
                 api = new DatabaseAPI(logger, this);
                 break;
@@ -277,12 +280,6 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
                 break;
             case MSG_TYPE_AQL:
                 api = new AqlAPI(logger, this);
-                break;
-            case MSG_TYPE_AQL_QUERY:
-                //api = new AqlQueryAPI(logger, this);
-                break;                
-            case MSG_TYPE_AQL_CURSOR:
-                //api = new AqlCursorAPI(logger, this);
                 break;
             case MSG_TYPE_AQL_USER:
                 //api = new AqlUserAPI(logger, this);

@@ -34,6 +34,9 @@ import santo.vertx.arangodb.rest.DocumentAPI;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DocumentIntegrationTest extends BaseIntegrationTest {
     
+    public static String docId = null;
+    public static String docRevision = null;
+
     @Test
     public void test01aCreateTestDocument() {
         System.out.println("*** test01aCreateTestDocument ***");

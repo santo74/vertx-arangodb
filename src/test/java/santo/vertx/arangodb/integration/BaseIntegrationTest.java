@@ -37,18 +37,11 @@ import santo.vertx.arangodb.Helper;
  */
 public class BaseIntegrationTest extends TestVerticle {
     
-    public static String docId = null;
-    public static String docRevision = null;
     public static String indexHashId = null;
     public static String indexSkiplistId = null;
     public static String indexFulltextId = null;
     public static String indexCapId = null;
     public static String indexGeoId = null;
-    public static String startVertex = null;
-    public static String edgeRevision = null;
-    public static String edgeId = null;
-    public static String fromId = null;
-    public static String toId = null;
     
     public static final String DEFAULT_ADDRESS = "santo.vertx.arangodb";
     public static final String DEFAULT_TEST_DB = "testdb";

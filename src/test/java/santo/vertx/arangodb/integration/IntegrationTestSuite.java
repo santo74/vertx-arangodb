@@ -31,6 +31,7 @@ import org.vertx.testtools.TestVerticle;
     ,CollectionIntegrationTest.class
     ,IndexIntegrationTest.class
     ,DocumentIntegrationTest.class
+    ,GenericIntegrationTest.class
     ,EdgeIntegrationTest.class
     ,SimpleQueryIntegrationTest.class
     ,TransactionIntegrationTest.class
