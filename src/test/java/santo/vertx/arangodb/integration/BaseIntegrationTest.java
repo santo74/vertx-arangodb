@@ -51,6 +51,8 @@ public class BaseIntegrationTest extends TestVerticle {
     public JsonObject config;
     public String address;
     public String dbName;
+    public String dbUser;
+    public String dbPwd;
     
     public String vertexColName = "vertexcol";
     public String edgeColName = "edgecol";
@@ -62,6 +64,8 @@ public class BaseIntegrationTest extends TestVerticle {
         config = loadConfig();
         address = Helper.getHelper().getOptionalString(config, "address", DEFAULT_ADDRESS);
         dbName = Helper.getHelper().getOptionalString(config, "dbname", DEFAULT_TEST_DB);
+        dbUser = Helper.getHelper().getOptionalString(config, "username", null);
+        dbPwd = Helper.getHelper().getOptionalString(config, "password", null);
         
         // Deploy our persistor before starting the tests
         deployVerticle(ArangoPersistor.class.getName(), config, 1);

@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.testtools.VertxAssert;
 import santo.vertx.arangodb.ArangoPersistor;
@@ -60,6 +61,13 @@ public class DatabaseIntegrationTest extends BaseIntegrationTest {
     public void test01CreateDatabase() {
         System.out.println("*** test01CreateDatabase ***");
         JsonObject databaseObject = new JsonObject().putString("name", dbName);
+        // Specify default user if authentication enabled to ensure we can access the database
+        if (dbUser != null && dbPwd != null) {
+            JsonObject usersObject = new JsonObject();
+            usersObject.putString("username", dbUser);
+            usersObject.putString("passwd", dbPwd);
+            databaseObject.putArray("users", new JsonArray().add(usersObject));
+        }
         JsonObject requestObject = new JsonObject();
         requestObject.putString(ArangoPersistor.MSG_PROPERTY_TYPE, ArangoPersistor.MSG_TYPE_DATABASE);
         requestObject.putString(DatabaseAPI.MSG_PROPERTY_ACTION, DatabaseAPI.MSG_ACTION_CREATE);
