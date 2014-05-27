@@ -9,7 +9,7 @@
     </formats>
 
     <baseDirectory>${module.name}</baseDirectory>
-    <includeBaseDirectory>true</includeBaseDirectory>
+    <includeBaseDirectory>false</includeBaseDirectory>
 
     <fileSets>
         <fileSet>
