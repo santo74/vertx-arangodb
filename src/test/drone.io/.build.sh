@@ -64,3 +64,22 @@ mvn install -q -DskipTests=true
 ## maven test
 echo "Starting Tests"
 mvn test -Dtest=santo.vertx.arangodb.integration.IntegrationTestSuite
+
+## deploy to bintray
+VERSION=`cat VERSION`
+echo VERSION=$VERSION
+
+if [[ "$GIT_BRANCH" = "master" ]] ; then
+  echo "Master commit, not deploying"
+elif [[ $VERSION == *SNAPSHOT* ]] ; then
+  echo "Snapshot version, not deploying"
+else
+  echo "non-snapshot version, deploying to bintray"
+
+  cd target
+  MODULE_NAME=`find vertx-arangodb-*-mod.zip`
+  cd ..
+  MODULE_FILE="target/$MODULE_NAME"
+
+  curl -X PUT -u santo:<API-KEY> --data-binary @$MODULE_FILE "https://api.bintray.com/content/santo/vertx-mods/vertx-arangodb/$MODULE_NAME;bt_package=vertx-arangodb;bt_version=$VERSION"
+fi
