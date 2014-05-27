@@ -74,7 +74,7 @@ if [[ "$GIT_BRANCH" = "master" ]] ; then
 elif [[ $VERSION == *SNAPSHOT* ]] ; then
   echo "Snapshot version, not deploying"
 else
-  echo "non-snapshot version, deploying to bintray"
+  echo "non-snapshot version, deploying to BinTray"
 
   cd target
   MODULE_NAME=`find vertx-arangodb-*-mod.zip`
