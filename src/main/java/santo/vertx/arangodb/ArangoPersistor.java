@@ -85,8 +85,8 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public String SETTING_DBNAME = DEFAULT_DATABASE;
     public String SETTING_USERNAME = null;
     public String SETTING_PASSWORD = null;
-    public int SETTING_CONNECT_TIMEOUT = 60000;
-    public boolean SETTING_KEEPALIVE = true;
+    public int SETTING_CONNECT_TIMEOUT = 15000;
+    public boolean SETTING_KEEPALIVE = false;
     public boolean SETTING_SSL = false;
     public boolean SETTING_SSL_TRUSTALL = false;
     public boolean SETTING_SSL_VERIFYHOST = true;
@@ -94,7 +94,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public String SETTING_SSL_TRUSTSTORE_PASSWORD = null;
     public String SETTING_SSL_KEYSTORE = null;
     public String SETTING_SSL_KEYSTORE_PASSWORD = null;
-    public int SETTING_MAXPOOLSIZE = 50;
+    public int SETTING_MAXPOOLSIZE = 10;
     public boolean SETTING_COMPRESSION = false;
     public boolean SETTING_REUSE_ADDRESS = false;
     public boolean SETTING_TCP_KEEPALIVE = false;
