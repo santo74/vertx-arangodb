@@ -77,20 +77,19 @@ public class RestResponseHandler implements Handler<HttpClientResponse> {
                 }
                 
                 // send response
-                if (statusCode >= 200 && statusCode < 300) sendSuccess(getMsg(), "success", restResponse);
-                else sendError(getMsg(), "error", restResponse);
+                if (statusCode >= 200 && statusCode < 300) sendResponse(true, statusCode, restResponse);
+                else sendResponse(false, statusCode, restResponse);
                 
                 logger.trace("[RESPONSE-" + getId() + "] body parsed" + ", time: " + timeFormatter.format(new Date()));
             }
         });
     }
     
-    private void sendSuccess(Message<JsonObject> msg, String message, Object result) {
-        if (getMsg() != null) helper.sendSuccess(msg, message, result);
-    }
-
-    private void sendError(Message<JsonObject> msg, String message, Object result) {
-        if (getMsg() != null) helper.sendError(msg, message, result);
+    private void sendResponse(boolean success, int statuscode, Object result) {
+        if (getMsg() != null) {
+            if (success) helper.sendSuccess(getMsg(), statuscode, "success", result);
+            else helper.sendError(getMsg(), statuscode, "error", result);
+        }
     }
 
     protected String getId() {

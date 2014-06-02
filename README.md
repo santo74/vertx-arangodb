@@ -103,9 +103,10 @@ For now, please take a look at the integration tests where you can find examples
 
 ### Receiving a response
 
-The response will differ per request type/action, but always contains the fields "status", "message", "severity" and "result", where:
+The response will differ per request type/action, but always contains the fields "status", "statuscode", "message", "severity" and "result", where:
 
 * `status` : "ok" if the request was successful, "error" if the request was not successful.
+* `statuscode` : contains the HTTP status code of the REST request to the ArangoDB instance. (Added because we don't always receive a return code in the response object of ArangoDB)
 * `message` : contains a short message about the result, most of the time either "success" or "error", but can also be more specific such as "invalid type specified (sharding)".
 * `severity` : The severity of the result. Can be "success", "info", "warning" or "danger".
 * `result` : a Json object or array (depending on the request type/action) containing the ArangoDB response
@@ -114,6 +115,7 @@ Example of a successful request:
 
     {
         "status": "ok",
+        "statuscode": 200,
         "message": "success",
         "severity": "success",
         "result": {
@@ -130,6 +132,7 @@ Example of an unsuccessful request:
 
     {
         "status": "error",
+        "statuscode": 404,
         "message": "error",
         "severity": "danger",
         "result": {

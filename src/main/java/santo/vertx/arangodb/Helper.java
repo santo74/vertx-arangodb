@@ -29,6 +29,7 @@ public class Helper {
     private static final String ERROR_FIELD_MISSING = "Required field missing: ";
     
     private static final String PROPERTY_MSG_STATUS = "status";
+    private static final String PROPERTY_MSG_STATUSCODE = "statuscode";
     private static final String PROPERTY_MSG_MESSAGE = "message";
     private static final String PROPERTY_MSG_SEVERITY = "severity";
     private static final String PROPERTY_MSG_RESULT = "result";
@@ -36,6 +37,8 @@ public class Helper {
     private static final String VALUE_MSG_STATUS_OK = "ok";
     private static final String VALUE_MSG_STATUS_ERROR = "error";
     private static final String VALUE_MSG_STATUS_DENIED = "denied";
+    
+    private static final int VALUE_MSG_STATUSCODE_UNSPECIFIED = 0;
 
     private static final String VALUE_MSG_SEVERITY_SUCCESS = "success";
     private static final String VALUE_MSG_SEVERITY_INFO = "info";
@@ -57,54 +60,102 @@ public class Helper {
     }
     
     public boolean sendSuccess(final Message<JsonObject> msg, final String message) {
-        return sendSuccess(msg, message, VALUE_MSG_SEVERITY_SUCCESS);
+        return sendSuccess(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message);
+    }
+
+    public boolean sendSuccess(final Message<JsonObject> msg, final int statuscode, final String message) {
+        return sendSuccess(msg, statuscode, message, VALUE_MSG_SEVERITY_SUCCESS);
     }
 
     public boolean sendSuccess(final Message<JsonObject> msg, final String message, final String severity) {
-        return sendSuccess(msg, message, severity, null);
+        return sendSuccess(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, severity);
+    }
+
+    public boolean sendSuccess(final Message<JsonObject> msg, final int statuscode, final String message, final String severity) {
+        return sendSuccess(msg, statuscode, message, severity, null);
     }
 
     public boolean sendSuccess(final Message<JsonObject> msg, final String message, final Object result) {
-        return sendSuccess(msg, message, VALUE_MSG_SEVERITY_SUCCESS, result);
+        return sendSuccess(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, result);
+    }
+
+    public boolean sendSuccess(final Message<JsonObject> msg, final int statuscode, final String message, final Object result) {
+        return sendSuccess(msg, statuscode, message, VALUE_MSG_SEVERITY_SUCCESS, result);
     }
 
     public boolean sendSuccess(final Message<JsonObject> msg, final String message, final String severity, final Object result) {
-        return sendResponse(msg, VALUE_MSG_STATUS_OK, message, severity, result);
+        return sendSuccess(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, severity, result);
+    }
+
+    public boolean sendSuccess(final Message<JsonObject> msg, final int statuscode, final String message, final String severity, final Object result) {
+        return sendResponse(msg, VALUE_MSG_STATUS_OK, statuscode, message, severity, result);
     }
 
     public boolean sendError(final Message<JsonObject> msg, final String message) {
-        return sendError(msg, message, VALUE_MSG_SEVERITY_DANGER);
+        return sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message);
     }
-    
+
+    public boolean sendError(final Message<JsonObject> msg, final int statuscode, final String message) {
+        return sendError(msg, statuscode, message, VALUE_MSG_SEVERITY_DANGER);
+    }
+
     public boolean sendError(final Message<JsonObject> msg, final String message, final String severity) {
-        return sendError(msg, message, severity, null);
+        return sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, severity);
+    }
+
+    public boolean sendError(final Message<JsonObject> msg, final int statuscode, final String message, final String severity) {
+        return sendError(msg, statuscode, message, severity, null);
     }
 
     public boolean sendError(final Message<JsonObject> msg, final String message, final Object result) {
-        return sendError(msg, message, VALUE_MSG_SEVERITY_DANGER, result);
+        return sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, result);
+    }
+
+    public boolean sendError(final Message<JsonObject> msg, final int statuscode, final String message, final Object result) {
+        return sendError(msg, statuscode, message, VALUE_MSG_SEVERITY_DANGER, result);
     }
 
     public boolean sendError(final Message<JsonObject> msg, final String message, final String severity, final Object result) {
-        return sendResponse(msg, VALUE_MSG_STATUS_ERROR, message, severity, result);
+        return sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, severity, result);
+    }
+
+    public boolean sendError(final Message<JsonObject> msg, final int statuscode, final String message, final String severity, final Object result) {
+        return sendResponse(msg, VALUE_MSG_STATUS_ERROR, statuscode, message, severity, result);
     }
 
     public boolean sendDenied(final Message<JsonObject> msg, final String message) {
-        return sendDenied(msg, message, VALUE_MSG_SEVERITY_DANGER);
+        return sendDenied(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message);
+    }
+
+    public boolean sendDenied(final Message<JsonObject> msg, final int statuscode, final String message) {
+        return sendDenied(msg, statuscode, message, VALUE_MSG_SEVERITY_DANGER);
     }
     
     public boolean sendDenied(final Message<JsonObject> msg, final String message, final String severity) {
-        return sendDenied(msg, message, severity, null);
+        return sendDenied(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, severity);
+    }
+
+    public boolean sendDenied(final Message<JsonObject> msg, final int statuscode, final String message, final String severity) {
+        return sendDenied(msg, statuscode, message, severity, null);
     }
 
     public boolean sendDenied(final Message<JsonObject> msg, final String message, final Object result) {
-        return sendDenied(msg, message, VALUE_MSG_SEVERITY_DANGER, result);
+        return sendDenied(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, result);
+    }
+
+    public boolean sendDenied(final Message<JsonObject> msg, final int statuscode, final String message, final Object result) {
+        return sendDenied(msg, statuscode, message, VALUE_MSG_SEVERITY_DANGER, result);
     }
 
     public boolean sendDenied(final Message<JsonObject> msg, final String message, final String severity, final Object result) {
-        return sendResponse(msg, VALUE_MSG_STATUS_DENIED, message, severity, result);
+        return sendDenied(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, message, severity, result);
+    }
+
+    public boolean sendDenied(final Message<JsonObject> msg, final int statuscode, final String message, final String severity, final Object result) {
+        return sendResponse(msg, VALUE_MSG_STATUS_DENIED, statuscode, message, severity, result);
     }
     
-    public boolean sendResponse(final Message<JsonObject> msg, final String status, final String message, final String severity, final Object result) {
+    public boolean sendResponse(final Message<JsonObject> msg, final String status, final int statuscode, final String message, final String severity, final Object result) {
         boolean success = false;
         
         if (msg == null) {
@@ -113,6 +164,7 @@ public class Helper {
         else {
             JsonObject responseMsg = new JsonObject();
             responseMsg.putString(PROPERTY_MSG_STATUS, status);
+            if (statuscode >= 100) responseMsg.putNumber(PROPERTY_MSG_STATUSCODE, statuscode);
             if (message != null) responseMsg.putString(PROPERTY_MSG_MESSAGE, message);
             if (severity != null) responseMsg.putString(PROPERTY_MSG_SEVERITY, severity);
             if (result != null) responseMsg.putValue(PROPERTY_MSG_RESULT, result);
@@ -143,7 +195,7 @@ public class Helper {
         Boolean paramValue = document.getBoolean(field);
         if (paramValue == null) {
             if (abort) throw new IllegalArgumentException(ERROR_FIELD_MISSING + field);
-            if (msg != null) sendError(msg, ERROR_FIELD_MISSING + field); // mandatory field
+            if (msg != null) sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, ERROR_FIELD_MISSING + field); // mandatory field
             else paramValue = defaultValue; // optional field
         }
 
@@ -170,7 +222,7 @@ public class Helper {
         String paramValue = document.getString(field);
         if (paramValue == null) {
             if (abort) throw new IllegalArgumentException(ERROR_FIELD_MISSING + field);
-            if (msg != null) sendError(msg, ERROR_FIELD_MISSING + field); // mandatory field
+            if (msg != null) sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, ERROR_FIELD_MISSING + field); // mandatory field
             else paramValue = defaultValue; // optional field
         }
 
@@ -193,7 +245,7 @@ public class Helper {
         Number paramValue = document.getNumber(field);
         if (paramValue == null) {
             if (abort) throw new IllegalArgumentException(ERROR_FIELD_MISSING + field);
-            if (msg != null) sendError(msg, ERROR_FIELD_MISSING + field); // mandatory field
+            if (msg != null) sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, ERROR_FIELD_MISSING + field); // mandatory field
             else paramValue = defaultValue; // optional field
         }
 
@@ -216,7 +268,7 @@ public class Helper {
         Number paramValue = document.getNumber(field);
         if (paramValue == null) {
             if (abort) throw new IllegalArgumentException(ERROR_FIELD_MISSING + field);
-            if (msg != null) sendError(msg, ERROR_FIELD_MISSING + field); // mandatory field
+            if (msg != null) sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, ERROR_FIELD_MISSING + field); // mandatory field
             else paramValue = defaultValue; // optional field
         }
 
@@ -243,7 +295,7 @@ public class Helper {
         JsonObject paramValue = document.getObject(field);
         if (paramValue == null) {
             if (abort) throw new IllegalArgumentException(ERROR_FIELD_MISSING + field);
-            if (msg != null) sendError(msg, ERROR_FIELD_MISSING + field); // mandatory field
+            if (msg != null) sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, ERROR_FIELD_MISSING + field); // mandatory field
             else paramValue = defaultValue; // optional field
         }
 
@@ -270,7 +322,7 @@ public class Helper {
         JsonArray paramValue = document.getArray(field);
         if (paramValue == null) {
             if (abort) throw new IllegalArgumentException(ERROR_FIELD_MISSING + field);
-            if (msg != null) sendError(msg, ERROR_FIELD_MISSING + field); // mandatory field
+            if (msg != null) sendError(msg, VALUE_MSG_STATUSCODE_UNSPECIFIED, ERROR_FIELD_MISSING + field); // mandatory field
             else paramValue = defaultValue; // optional field
         }
 
