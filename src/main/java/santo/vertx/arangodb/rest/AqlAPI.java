@@ -211,7 +211,7 @@ public class AqlAPI extends AbstractRestAPI {
         httpGet(persistor, apiPath.toString(), headers, timeout, msg);
     }
 
-    // deletes the specified ASL user function, or all user functions in namespace if name should be treated as group (i.e. group=true)
+    // deletes the specified AQL user function or all user functions in namespace if name should be treated as group (i.e. group=true)
     private void deleteFunction(Message<JsonObject> msg, int timeout, JsonObject headers, String dbName) {
         // check required params
         

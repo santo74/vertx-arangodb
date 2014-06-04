@@ -57,8 +57,6 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public final String CFG_PROPERTY_DBNAME = "dbname";
     public final String CFG_PROPERTY_USERNAME = "username";
     public final String CFG_PROPERTY_PASSWORD = "password";
-    public final String CFG_PROPERTY_CONNECT_TIMEOUT = "connect_timeout";
-    public final String CFG_PROPERTY_KEEPALIVE = "keepalive";
     public final String CFG_PROPERTY_SSL = "ssl";
     public final String CFG_PROPERTY_SSL_TRUSTALL = "ssl_trustall";
     public final String CFG_PROPERTY_SSL_VERIFYHOST = "ssl_verifyhost";
@@ -66,8 +64,11 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public final String CFG_PROPERTY_SSL_TRUSTSTORE_PASSWORD = "truststore_password";
     public final String CFG_PROPERTY_SSL_KEYSTORE = "keystore";
     public final String CFG_PROPERTY_SSL_KEYSTORE_PASSWORD = "keystore_password";
+    public final String CFG_PROPERTY_GENERIC = "generic";
     public final String CFG_PROPERTY_MAXPOOLSIZE = "maxpoolsize";
+    public final String CFG_PROPERTY_KEEPALIVE = "keepalive";
     public final String CFG_PROPERTY_COMPRESSION = "compression";
+    public final String CFG_PROPERTY_CONNECT_TIMEOUT = "connect_timeout";
     public final String CFG_PROPERTY_REUSE_ADDRESS = "reuse_address";
     public final String CFG_PROPERTY_TCP_KEEPALIVE = "tcp_keepalive";
     public final String CFG_PROPERTY_TCP_NODELAY = "tcp_nodelay";
@@ -85,8 +86,6 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public String SETTING_DBNAME = DEFAULT_DATABASE;
     public String SETTING_USERNAME = null;
     public String SETTING_PASSWORD = null;
-    public int SETTING_CONNECT_TIMEOUT = 15000;
-    public boolean SETTING_KEEPALIVE = false;
     public boolean SETTING_SSL = false;
     public boolean SETTING_SSL_TRUSTALL = false;
     public boolean SETTING_SSL_VERIFYHOST = true;
@@ -94,8 +93,11 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public String SETTING_SSL_TRUSTSTORE_PASSWORD = null;
     public String SETTING_SSL_KEYSTORE = null;
     public String SETTING_SSL_KEYSTORE_PASSWORD = null;
+    public boolean SETTING_GENERIC = false;
     public int SETTING_MAXPOOLSIZE = 10;
+    public boolean SETTING_KEEPALIVE = false;
     public boolean SETTING_COMPRESSION = false;
+    public int SETTING_CONNECT_TIMEOUT = 15000;
     public boolean SETTING_REUSE_ADDRESS = false;
     public boolean SETTING_TCP_KEEPALIVE = false;
     public boolean SETTING_TCP_NODELAY = true;
@@ -157,7 +159,6 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
         SETTING_DBNAME = Helper.getHelper().getOptionalString(getConfig(), CFG_PROPERTY_DBNAME, SETTING_DBNAME);
         SETTING_USERNAME = Helper.getHelper().getOptionalString(getConfig(), CFG_PROPERTY_USERNAME, SETTING_USERNAME);
         SETTING_PASSWORD = Helper.getHelper().getOptionalString(getConfig(), CFG_PROPERTY_PASSWORD, SETTING_PASSWORD);
-        SETTING_KEEPALIVE = Helper.getHelper().getOptionalBoolean(getConfig(), CFG_PROPERTY_KEEPALIVE, SETTING_KEEPALIVE);
         SETTING_SSL = Helper.getHelper().getOptionalBoolean(getConfig(), CFG_PROPERTY_SSL, SETTING_SSL);
         if (SETTING_SSL) SETTING_PORT = Helper.getHelper().getOptionalInt(getConfig(), CFG_PROPERTY_PORT, DEFAULT_SETTING_PORT_HTTPS);
         else SETTING_PORT = Helper.getHelper().getOptionalInt(getConfig(), CFG_PROPERTY_PORT, DEFAULT_SETTING_PORT_HTTP);
@@ -167,7 +168,9 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
         SETTING_SSL_KEYSTORE_PASSWORD = Helper.getHelper().getOptionalString(getConfig(), CFG_PROPERTY_SSL_KEYSTORE_PASSWORD, SETTING_SSL_KEYSTORE_PASSWORD);
         SETTING_SSL_TRUSTSTORE = Helper.getHelper().getOptionalString(getConfig(), CFG_PROPERTY_SSL_TRUSTSTORE, SETTING_SSL_TRUSTSTORE);
         SETTING_SSL_TRUSTSTORE_PASSWORD = Helper.getHelper().getOptionalString(getConfig(), CFG_PROPERTY_SSL_TRUSTSTORE_PASSWORD, SETTING_SSL_TRUSTSTORE_PASSWORD);
+        SETTING_GENERIC = Helper.getHelper().getOptionalBoolean(getConfig(), CFG_PROPERTY_GENERIC, SETTING_GENERIC);
         SETTING_MAXPOOLSIZE = Helper.getHelper().getOptionalInt(getConfig(), CFG_PROPERTY_MAXPOOLSIZE, SETTING_MAXPOOLSIZE);
+        SETTING_KEEPALIVE = Helper.getHelper().getOptionalBoolean(getConfig(), CFG_PROPERTY_KEEPALIVE, SETTING_KEEPALIVE);
         SETTING_COMPRESSION = Helper.getHelper().getOptionalBoolean(getConfig(), CFG_PROPERTY_COMPRESSION, SETTING_COMPRESSION);
         SETTING_CONNECT_TIMEOUT = Helper.getHelper().getOptionalInt(getConfig(), CFG_PROPERTY_CONNECT_TIMEOUT, SETTING_CONNECT_TIMEOUT);
         SETTING_REUSE_ADDRESS = Helper.getHelper().getOptionalBoolean(getConfig(), CFG_PROPERTY_REUSE_ADDRESS, SETTING_REUSE_ADDRESS);
@@ -267,6 +270,11 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
 
         switch (type) {
             case MSG_TYPE_GENERIC:
+                if (!SETTING_GENERIC) {
+                    logger.warn(logPrefix + "The generic API is currently disabled");
+                    Helper.getHelper().sendError(msg, "The generic API is currently disabled");
+                    return;
+                }
                 api = new GenericAPI(logger, this);
                 break;
             case MSG_TYPE_DATABASE:
