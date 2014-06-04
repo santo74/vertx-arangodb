@@ -21,7 +21,7 @@ There are several ways to install the module:
 
         "persistorConfig": {
             "type": "module",
-            "name": "santo~vertx-arangodb~1.0.0-beta1",
+            "name": "santo~vertx-arangodb~1.0.0",
             "enabled": true,
             "instances": 1,
             ...
@@ -30,7 +30,7 @@ There are several ways to install the module:
 
 * install manually on the command line
 
-`vertx install santo~vertx-arangodb~1.0.0-beta1`
+`vertx install santo~vertx-arangodb~1.0.0`
 
 * download manually from bintray. See download link at the top of this document
 
