@@ -93,7 +93,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public String SETTING_SSL_TRUSTSTORE_PASSWORD = null;
     public String SETTING_SSL_KEYSTORE = null;
     public String SETTING_SSL_KEYSTORE_PASSWORD = null;
-    public boolean SETTING_GENERIC = false;
+    public boolean SETTING_GENERIC = true;
     public int SETTING_MAXPOOLSIZE = 10;
     public boolean SETTING_KEEPALIVE = false;
     public boolean SETTING_COMPRESSION = false;
