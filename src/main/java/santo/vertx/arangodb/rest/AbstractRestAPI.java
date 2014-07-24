@@ -58,11 +58,16 @@ public abstract class AbstractRestAPI {
     public static final String MSG_PROPERTY_QUERY = "query";
     public static final String MSG_PROPERTY_NAME = "name";
     public static final String MSG_PROPERTY_GRAPH_NAME = "graph-name";
+    public static final String MSG_PROPERTY_COLLECTION_NAME = "collection-name";
     public static final String MSG_PROPERTY_VERTEX_NAME = "vertex-name";
     public static final String MSG_PROPERTY_EDGE_NAME = "edge-name";
     public static final String MSG_PROPERTY_VERTEX_ID = "vertex-id";
+    public static final String MSG_PROPERTY_VERTEX_KEY = "vertex-key";
+    public static final String MSG_PROPERTY_EDGE_KEY = "edge-key";
     public static final String MSG_PROPERTY_NAMESPACE = "namespace";
     public static final String MSG_PROPERTY_GROUP = "group";
+    public static final String MSG_PROPERTY_DROP_COLLECTIONS = "dropCollections";
+    public static final String MSG_PROPERTY_DROP_COLLECTION = "dropCollection";
 
     // DOCUMENT ATTRIBUTES
     public static final String DOC_ATTRIBUTE_NAME = "name";
@@ -93,6 +98,8 @@ public abstract class AbstractRestAPI {
     public static final String DOC_ATTRIBUTE_DIRECTION = "direction";
     public static final String DOC_ATTRIBUTE_EXPANDER = "expander";
     public static final String DOC_ATTRIBUTE_CODE = "code";
+    public static final String DOC_ATTRIBUTE_EDGE_DEFINITIONS = "edgeDefinitions";
+    public static final String DOC_ATTRIBUTE_ORPHAN_COLLECTIONS = "orphanCollections";
 
     protected ArangoPersistor persistor = null;
     protected Logger logger;

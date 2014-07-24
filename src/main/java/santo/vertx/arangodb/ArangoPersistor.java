@@ -33,6 +33,7 @@ import santo.vertx.arangodb.rest.DatabaseAPI;
 import santo.vertx.arangodb.rest.DocumentAPI;
 import santo.vertx.arangodb.rest.EdgeAPI;
 import santo.vertx.arangodb.rest.GenericAPI;
+import santo.vertx.arangodb.rest.GharialAPI;
 import santo.vertx.arangodb.rest.GraphAPI;
 import santo.vertx.arangodb.rest.IndexAPI;
 import santo.vertx.arangodb.rest.SimpleQueryAPI;
@@ -114,6 +115,7 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
     public static final String MSG_TYPE_INDEX = "index";
     public static final String MSG_TYPE_TRANSACTION = "transaction";
     public static final String MSG_TYPE_GRAPH = "graph";
+    public static final String MSG_TYPE_GHARIAL = "gharial";
     public static final String MSG_TYPE_TRAVERSAL = "traversal";
     public static final String MSG_TYPE_REPLICATION = "replication";
     public static final String MSG_TYPE_IMPORT = "import";
@@ -306,6 +308,9 @@ public class ArangoPersistor extends Verticle implements Handler<Message<JsonObj
                 break;                
             case MSG_TYPE_GRAPH:
                 api = new GraphAPI(logger, this);
+                break;
+            case MSG_TYPE_GHARIAL:
+                api = new GharialAPI(logger, this);
                 break;
             case MSG_TYPE_TRAVERSAL:
                 api = new TraversalAPI(logger, this);
