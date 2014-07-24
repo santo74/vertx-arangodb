@@ -191,7 +191,8 @@ public class CollectionIntegrationTest extends BaseIntegrationTest {
                                 JsonObject response = reply.body();
                                 System.out.println("response: " + response);
                                 JsonObject arangoResult = response.getObject("result");
-                                VertxAssert.assertEquals("Rotation of the specified collection resulted in an error: " + response.getString("message"), "ok", response.getString("status"));
+                                // Treat 400 as ok, because it just means there is currently no journal (which is not an error with the API call)
+                                VertxAssert.assertTrue("Rotation of the specified collection resulted in an error: " + response.getString("message"), response.getInteger("statuscode") == 200 || response.getInteger("statuscode") == 400);
                                 System.out.println("response details: " + arangoResult);
                             }
                             catch (Exception e) {
