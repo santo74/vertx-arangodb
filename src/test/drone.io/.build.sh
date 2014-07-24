@@ -5,7 +5,7 @@ BUILDDIR=`pwd`
 HOMEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $HOMEDIR
 
-VERSION=2.0.7
+VERSION=2.2.0
 NAME=ArangoDB-$VERSION
 
 if [ ! -d "$DIR/$NAME" ]; then
