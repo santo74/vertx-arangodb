@@ -28,7 +28,7 @@ import santo.vertx.arangodb.ArangoPersistor;
 import santo.vertx.arangodb.rest.IndexAPI;
 
 /**
- * Integration tests for the {@link santo.vertx.arangodb.rest.IndexAPI} against an external <a href="http://www.arangodb.org">ArangoDB</a> instance
+ * Integration tests for the {@link santo.vertx.arangodb.rest.IndexAPI} against an external <a href="http://www.arangodb.com">ArangoDB</a> instance
  * 
  * @author sANTo
  */

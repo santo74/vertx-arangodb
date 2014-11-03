@@ -5,13 +5,13 @@ BUILDDIR=`pwd`
 HOMEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $HOMEDIR
 
-VERSION=2.2.0
+VERSION=2.2
 NAME=ArangoDB-$VERSION
 
 if [ ! -d "$DIR/$NAME" ]; then
   # download ArangoDB
-  echo "wget http://www.arangodb.org/repositories/travisCI/$NAME.tar.gz"
-  wget http://www.arangodb.org/repositories/travisCI/$NAME.tar.gz
+  echo "wget http://www.arangodb.com/repositories/travisCI/$NAME.tar.gz"
+  wget http://www.arangodb.com/repositories/travisCI/$NAME.tar.gz
   echo "tar zxf $NAME.tar.gz"
   tar zvxf $NAME.tar.gz
 fi

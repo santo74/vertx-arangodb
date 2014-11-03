@@ -20,7 +20,7 @@ import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
 /**
- * Integration tests for the {@link santo.vertx.arangodb.rest.TraversalAPI} against an external <a href="http://www.arangodb.org">ArangoDB</a> instance
+ * Integration tests for the {@link santo.vertx.arangodb.rest.TraversalAPI} against an external <a href="http://www.arangodb.com">ArangoDB</a> instance
  * 
  * @author sANTo
  */

@@ -29,7 +29,7 @@ import santo.vertx.arangodb.rest.GraphAPI;
 import santo.vertx.arangodb.rest.TraversalAPI;
 
 /**
- * Integration tests for the {@link santo.vertx.arangodb.rest.GraphAPI} against an external <a href="http://www.arangodb.org">ArangoDB</a> instance
+ * Integration tests for the {@link santo.vertx.arangodb.rest.GraphAPI} against an external <a href="http://www.arangodb.com">ArangoDB</a> instance
  * 
  * @author sANTo
  */

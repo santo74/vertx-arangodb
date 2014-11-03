@@ -28,7 +28,7 @@ import santo.vertx.arangodb.rest.DocumentAPI;
 import santo.vertx.arangodb.rest.EdgeAPI;
 
 /**
- * Integration tests for the {@link santo.vertx.arangodb.rest.EdgeAPI} against an external <a href="http://www.arangodb.org">ArangoDB</a> instance
+ * Integration tests for the {@link santo.vertx.arangodb.rest.EdgeAPI} against an external <a href="http://www.arangodb.com">ArangoDB</a> instance
  * 
  * @author sANTo
  */

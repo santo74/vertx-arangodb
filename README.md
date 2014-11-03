@@ -5,7 +5,7 @@
 vertx-arangodb
 ==============
 
-This is a Non-blocking [Vert.x](http://vertx.io) persistor module for the [ArangoDB](http://www.arangodb.org) Multi-model database using its [REST](http://www.arangodb.org/manuals/current/ImplementorManual.html) interface.
+This is a Non-blocking [Vert.x](http://vertx.io) persistor module for the [ArangoDB](http://www.arangodb.com) Multi-model database using its [REST](http://www.arangodb.com/manuals/current/ImplementorManual.html) interface.
 
 ## Requirements
 
